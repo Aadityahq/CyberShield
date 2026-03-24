@@ -29,6 +29,8 @@ Implemented frontend modules:
 - Shared API service with auth interceptor
 - Reusable Navbar layout component
 - Reusable AdminNavbar layout component
+- Global UI design system (`.card`, `.btn`, `.btn-primary`, `.btn-danger`, `.input`)
+- Polished status indicators for reports and AI prediction result cards
 
 ## Active Services
 

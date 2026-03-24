@@ -77,6 +77,16 @@
 - Upgraded `PrivateRoute` to support `adminOnly` access control
 - Verified frontend startup after admin module integration
 
+## Day 14
+- Applied controlled UI polish with global design utilities in `index.css` (`.card`, `.btn`, `.input`)
+- Upgraded both navbars to a cleaner, consistent top layout
+- Polished user dashboard cards with clearer hierarchy and navigation actions
+- Polished report forms/cards with consistent spacing, typography, and status colors
+- Upgraded AI detector result UI to high-impact colored outcome card
+- Upgraded article list cards for cleaner Knowledge Hub presentation
+- Polished admin dashboard stats cards and all admin management screens
+- Verified frontend startup after UI refinement pass
+
 ---
 
 ## Notes

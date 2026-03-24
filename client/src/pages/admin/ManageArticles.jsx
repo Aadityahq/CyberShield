@@ -53,21 +53,21 @@ export default function ManageArticles() {
       <div className="p-6">
         <h2 className="text-xl mb-4">Manage Articles</h2>
 
-        <form onSubmit={createArticle} className="mb-6">
+        <form onSubmit={createArticle} className="card mb-6">
           <input
             placeholder="Title"
-            className="border p-2 w-full mb-2"
+            className="input"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
           <textarea
             placeholder="Content"
-            className="border p-2 w-full mb-2"
+            className="input"
             value={form.content}
             onChange={(e) => setForm({ ...form, content: e.target.value })}
           />
           <select
-            className="border p-2 w-full mb-2"
+            className="input"
             value={form.category}
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           >
@@ -76,22 +76,30 @@ export default function ManageArticles() {
             <option value="SCAM">Scam</option>
             <option value="PRIVACY">Privacy</option>
           </select>
-          <button className="bg-blue-500 text-white px-3 py-1">
+          <button className="btn btn-primary">
             Add Article
           </button>
         </form>
 
-        {articles.map((a) => (
-          <div key={a._id} className="border p-3 mb-2">
-            <h3>{a.title}</h3>
-            <button
-              onClick={() => deleteArticle(a._id)}
-              className="bg-red-500 text-white px-2 py-1 mt-2"
-            >
-              Delete
-            </button>
-          </div>
-        ))}
+        {articles.length === 0 ? (
+          <div className="card text-gray-500">No articles found.</div>
+        ) : (
+          articles.map((a) => (
+            <div key={a._id} className="card mb-3 flex items-center justify-between gap-3">
+              <div>
+                <h3 className="font-semibold">{a.title}</h3>
+                <p className="text-sm text-gray-500">{a.category}</p>
+              </div>
+
+              <button
+                onClick={() => deleteArticle(a._id)}
+                className="btn btn-danger"
+              >
+                Delete
+              </button>
+            </div>
+          ))
+        )}
       </div>
     </>
   );
