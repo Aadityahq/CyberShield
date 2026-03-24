@@ -64,6 +64,12 @@
 - Updated route map with protected routes for `/dashboard`, `/create-report`, and `/reports`
 - Fixed PostCSS and Tailwind config for ESM (`export default`) to resolve Vite startup errors
 
+## Day 12
+- Added AI Detector frontend page under `pages/ai/ScamDetector.jsx`
+- Added Knowledge Hub frontend pages under `pages/knowledge/Articles.jsx` and `pages/knowledge/ArticleDetail.jsx`
+- Connected protected routes for `/ai`, `/articles`, and `/articles/:id`
+- Verified Vite startup after route integration
+
 ---
 
 ## Notes

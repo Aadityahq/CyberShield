@@ -57,8 +57,8 @@
 ## 🟡 Medium Priority
 - [x] UI improvements (basic functional layout)
 - [ ] Mobile responsiveness
-- [ ] Add AI Detector frontend page (`/ai`)
-- [ ] Add Knowledge Hub list/detail frontend routes (`/articles`, `/articles/:id`)
+- [x] Add AI Detector frontend page (`/ai`)
+- [x] Add Knowledge Hub list/detail frontend routes (`/articles`, `/articles/:id`)
 - [ ] Split admin frontend into pages (ManageReports, ManageUsers, ManageArticles)
 
 ---

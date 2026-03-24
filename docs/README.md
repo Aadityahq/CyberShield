@@ -22,6 +22,8 @@ Implemented frontend modules:
 - Auth pages (Login/Register)
 - User Dashboard (navigation hub)
 - Report pages (Create Report, View Reports)
+- AI Detector page (`/ai`)
+- Knowledge Hub pages (Articles list + Article detail)
 - Protected routing with PrivateRoute
 - Shared API service with auth interceptor
 - Reusable Navbar layout component
@@ -73,6 +75,17 @@ Admin:
 - DELETE /api/admin/users/:id
 - GET /api/admin/reports
 - DELETE /api/admin/articles/:id
+
+## Frontend Route Summary
+
+- / (Login)
+- /register
+- /dashboard (protected)
+- /create-report (protected)
+- /reports (protected)
+- /ai (protected)
+- /articles (protected)
+- /articles/:id (protected)
 
 ## Environment
 

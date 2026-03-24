@@ -32,6 +32,28 @@ POST /api/ai/predict
 
 POST /api/articles
 GET /api/articles
+GET /api/articles/:id
+
+### Admin
+
+GET /api/admin/stats
+GET /api/admin/users
+DELETE /api/admin/users/:id
+GET /api/admin/reports
+DELETE /api/admin/articles/:id
+
+---
+
+## Frontend Routes
+
+/
+/register
+/dashboard
+/create-report
+/reports
+/ai
+/articles
+/articles/:id
 
 ---
 
