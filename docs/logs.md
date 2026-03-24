@@ -31,6 +31,14 @@
 - Added public article read APIs and admin-only article creation API
 - Connected `/api/articles` route in backend app
 
+## Day 9
+- Implemented Admin Dashboard backend module (controller with 5 privileged APIs)
+- Built dashboard stats endpoint (total users, reports, articles, pending reports)
+- Added user management APIs (list all users, delete user)
+- Enhanced report management with admin-only view of all reports with user details
+- Added article deletion API for admin cleanup
+- Connected `/api/admin` route with protect + adminOnly middleware protection
+
 ---
 
 ## Notes

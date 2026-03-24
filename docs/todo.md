@@ -41,9 +41,9 @@
 ---
 
 ### Phase 6: Admin Dashboard
-- [ ] View reports
+- [x] View reports
 - [x] Update report status
-- [ ] Manage users
+- [x] Manage users
 
 ---
 
