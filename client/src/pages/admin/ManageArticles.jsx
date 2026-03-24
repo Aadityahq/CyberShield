@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import API from "../../services/api";
 import AdminNavbar from "../../components/layout/AdminNavbar";
 
@@ -9,6 +10,8 @@ export default function ManageArticles() {
     content: "",
     category: "GENERAL"
   });
+  const [creating, setCreating] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     fetchArticles();
@@ -25,24 +28,32 @@ export default function ManageArticles() {
 
   const createArticle = async (e) => {
     e.preventDefault();
+    setCreating(true);
 
     try {
       await API.post("/articles", form);
+      toast.success("Article added");
       setForm({ title: "", content: "", category: "GENERAL" });
       fetchArticles();
     } catch (error) {
       console.error(error);
-      alert("Failed to create article");
+      toast.error("Failed to create article");
+    } finally {
+      setCreating(false);
     }
   };
 
   const deleteArticle = async (id) => {
+    setDeletingId(id);
     try {
       await API.delete(`/admin/articles/${id}`);
+      toast.success("Article deleted");
       fetchArticles();
     } catch (error) {
       console.error(error);
-      alert("Failed to delete article");
+      toast.error("Failed to delete article");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -77,7 +88,7 @@ export default function ManageArticles() {
             <option value="PRIVACY">Privacy</option>
           </select>
           <button className="btn btn-primary">
-            Add Article
+            {creating ? "Processing..." : "Add Article"}
           </button>
         </form>
 
@@ -94,8 +105,9 @@ export default function ManageArticles() {
               <button
                 onClick={() => deleteArticle(a._id)}
                 className="btn btn-danger"
+                disabled={deletingId === a._id}
               >
-                Delete
+                {deletingId === a._id ? "Processing..." : "Delete"}
               </button>
             </div>
           ))

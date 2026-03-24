@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import API from "../../services/api";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -12,11 +14,13 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const { data } = await API.post("/auth/login", form);
 
       localStorage.setItem("user", JSON.stringify(data));
+      toast.success("Login successful");
 
       // Redirect based on role
       if (data.role === "ADMIN") {
@@ -25,23 +29,25 @@ export default function Login() {
         navigate("/dashboard");
       }
     } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
+      toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
+    <div className="h-screen flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow w-80"
+        className="card w-80"
       >
-        <h2 className="text-xl mb-4">Login</h2>
+        <h2 className="text-xl mb-4 font-semibold">Login</h2>
 
         <input
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full mb-3 p-2 border"
+          className="input mb-3"
           onChange={handleChange}
         />
 
@@ -49,12 +55,12 @@ export default function Login() {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full mb-3 p-2 border"
+          className="input mb-3"
           onChange={handleChange}
         />
 
-        <button className="w-full bg-blue-500 text-white p-2">
-          Login
+        <button className="btn btn-primary w-full">
+          {loading ? "Processing..." : "Login"}
         </button>
 
         <p className="mt-3 text-sm">

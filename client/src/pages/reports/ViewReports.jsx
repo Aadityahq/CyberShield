@@ -26,7 +26,7 @@ export default function ViewReports() {
         <h2 className="text-xl mb-4">My Reports</h2>
 
         {reports.map((r) => (
-          <div key={r._id} className="card mb-3">
+          <div key={r._id} className="card mb-4">
             <h3 className="font-semibold text-lg">{r.title}</h3>
             <p className="text-gray-600">{r.description}</p>
 
@@ -34,7 +34,7 @@ export default function ViewReports() {
               <span className="text-gray-500">{r.category}</span>
 
               <span
-                className={`px-2 py-1 rounded text-white text-xs ${
+                className={`px-3 py-1 rounded-full text-white text-xs ${
                   r.status === "PENDING"
                     ? "bg-yellow-500"
                     : r.status === "REVIEWED"

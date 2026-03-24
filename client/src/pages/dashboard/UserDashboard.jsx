@@ -1,3 +1,4 @@
+import { Shield, FileText, Brain, Book } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/layout/Navbar";
 
@@ -14,25 +15,37 @@ export default function UserDashboard() {
           Welcome, {user?.name}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="card cursor-pointer hover:shadow-lg" onClick={() => navigate("/create-report")}>
-            <h3 className="font-semibold">Create Report</h3>
-            <p className="text-sm text-gray-500">Report suspicious activity</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-6">
+          <div className="card flex items-center gap-4 cursor-pointer" onClick={() => navigate("/create-report")}>
+            <Shield className="text-indigo-500" />
+            <div>
+              <h3 className="font-semibold">Create Report</h3>
+              <p className="text-sm text-gray-500">Report threats instantly</p>
+            </div>
           </div>
 
-          <div className="card cursor-pointer hover:shadow-lg" onClick={() => navigate("/reports")}>
-            <h3 className="font-semibold">View Reports</h3>
-            <p className="text-sm text-gray-500">Track your reports</p>
+          <div className="card flex items-center gap-4 cursor-pointer" onClick={() => navigate("/reports")}>
+            <FileText className="text-green-500" />
+            <div>
+              <h3 className="font-semibold">My Reports</h3>
+              <p className="text-sm text-gray-500">Track status</p>
+            </div>
           </div>
 
-          <div className="card cursor-pointer hover:shadow-lg" onClick={() => navigate("/ai")}>
-            <h3 className="font-semibold">AI Detector</h3>
-            <p className="text-sm text-gray-500">Analyze messages</p>
+          <div className="card flex items-center gap-4 cursor-pointer" onClick={() => navigate("/ai")}>
+            <Brain className="text-yellow-500" />
+            <div>
+              <h3 className="font-semibold">AI Detector</h3>
+              <p className="text-sm text-gray-500">Analyze scams</p>
+            </div>
           </div>
 
-          <div className="card cursor-pointer hover:shadow-lg" onClick={() => navigate("/articles")}>
-            <h3 className="font-semibold">Knowledge Hub</h3>
-            <p className="text-sm text-gray-500">Learn cybersecurity</p>
+          <div className="card flex items-center gap-4 cursor-pointer" onClick={() => navigate("/articles")}>
+            <Book className="text-purple-500" />
+            <div>
+              <h3 className="font-semibold">Knowledge Hub</h3>
+              <p className="text-sm text-gray-500">Stay informed</p>
+            </div>
           </div>
         </div>
       </div>

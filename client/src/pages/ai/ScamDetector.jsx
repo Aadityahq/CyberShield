@@ -1,17 +1,23 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import API from "../../services/api";
 import Navbar from "../../components/layout/Navbar";
 
 export default function ScamDetector() {
   const [text, setText] = useState("");
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const analyze = async () => {
+    setLoading(true);
     try {
       const { data } = await API.post("/ai/predict", { text });
       setResult(data);
+      toast.success("Analysis complete");
     } catch (error) {
-      alert("AI request failed");
+      toast.error("AI request failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,20 +40,20 @@ export default function ScamDetector() {
             onClick={analyze}
             className="btn btn-primary"
           >
-            Analyze
+            {loading ? "Processing..." : "Analyze"}
           </button>
         </div>
 
         {result && (
           <div
-            className={`mt-4 p-4 rounded text-white ${
+            className={`mt-5 p-5 rounded-xl text-white shadow ${
               result.label === "MALICIOUS"
-                ? "bg-red-500"
-                : "bg-green-500"
+                ? "bg-gradient-to-r from-red-500 to-red-600"
+                : "bg-gradient-to-r from-green-500 to-green-600"
             }`}
           >
-            <p className="font-semibold text-lg">{result.label}</p>
-            <p>Confidence: {result.confidence}</p>
+            <h3 className="text-xl font-bold">{result.label}</h3>
+            <p className="opacity-90">Confidence: {result.confidence}</p>
           </div>
         )}
       </div>

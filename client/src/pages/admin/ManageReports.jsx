@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import API from "../../services/api";
 import AdminNavbar from "../../components/layout/AdminNavbar";
 
 export default function ManageReports() {
   const [reports, setReports] = useState([]);
+  const [updatingId, setUpdatingId] = useState(null);
 
   useEffect(() => {
     fetchReports();
@@ -20,13 +22,17 @@ export default function ManageReports() {
 
   const updateStatus = async (id, status) => {
     if (!status) return;
+    setUpdatingId(id);
 
     try {
       await API.put(`/reports/${id}`, { status });
+      toast.success("Report status updated");
       fetchReports();
     } catch (error) {
       console.error(error);
-      alert("Failed to update status");
+      toast.error("Failed to update status");
+    } finally {
+      setUpdatingId(null);
     }
   };
 
@@ -65,6 +71,7 @@ export default function ManageReports() {
                 onChange={(e) => updateStatus(r._id, e.target.value)}
                 className="input mt-3"
                 defaultValue=""
+                disabled={updatingId === r._id}
               >
                 <option value="">Update Status</option>
                 <option value="REVIEWED">Reviewed</option>

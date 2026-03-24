@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import API from "../../services/api";
 import AdminNavbar from "../../components/layout/AdminNavbar";
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -19,12 +21,16 @@ export default function ManageUsers() {
   };
 
   const deleteUser = async (id) => {
+    setDeletingId(id);
     try {
       await API.delete(`/admin/users/${id}`);
+      toast.success("User deleted");
       fetchUsers();
     } catch (error) {
       console.error(error);
-      alert("Failed to delete user");
+      toast.error("Failed to delete user");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -48,8 +54,9 @@ export default function ManageUsers() {
               <button
                 onClick={() => deleteUser(u._id)}
                 className="btn btn-danger"
+                disabled={deletingId === u._id}
               >
-                Delete
+                {deletingId === u._id ? "Processing..." : "Delete"}
               </button>
             </div>
           ))

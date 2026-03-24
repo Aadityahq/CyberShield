@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import API from "../../services/api";
 import Navbar from "../../components/layout/Navbar";
 
@@ -8,6 +9,7 @@ export default function CreateReport() {
     description: "",
     category: "SCAM"
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,12 +17,16 @@ export default function CreateReport() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       await API.post("/reports", form);
-      alert("Report submitted successfully");
+      toast.success("Report submitted!");
+      setForm({ title: "", description: "", category: "SCAM" });
     } catch (error) {
-      alert("Error submitting report");
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,6 +42,7 @@ export default function CreateReport() {
             name="title"
             placeholder="Title"
             className="input"
+            value={form.title}
             onChange={handleChange}
           />
 
@@ -43,12 +50,14 @@ export default function CreateReport() {
             name="description"
             placeholder="Description"
             className="input"
+            value={form.description}
             onChange={handleChange}
           />
 
           <select
             name="category"
             className="input"
+            value={form.category}
             onChange={handleChange}
           >
             <option value="SCAM">Scam</option>
@@ -58,7 +67,7 @@ export default function CreateReport() {
           </select>
 
           <button className="btn btn-primary w-full">
-            Submit Report
+            {loading ? "Processing..." : "Submit Report"}
           </button>
         </form>
       </div>

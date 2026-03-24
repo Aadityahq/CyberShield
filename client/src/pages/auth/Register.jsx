@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import API from "../../services/api";
 
 export default function Register() {
@@ -8,6 +9,7 @@ export default function Register() {
     email: "",
     password: ""
   });
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,34 +19,38 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const { data } = await API.post("/auth/register", form);
 
       localStorage.setItem("user", JSON.stringify(data));
+      toast.success("Registration successful");
 
       navigate("/dashboard");
     } catch (error) {
-      alert(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
-      <form className="bg-white p-6 rounded shadow w-80" onSubmit={handleSubmit}>
-        <h2 className="text-xl mb-4">Register</h2>
+    <div className="h-screen flex items-center justify-center">
+      <form className="card w-80" onSubmit={handleSubmit}>
+        <h2 className="text-xl mb-4 font-semibold">Register</h2>
 
         <input
           name="name"
           placeholder="Name"
-          className="w-full mb-3 p-2 border"
+          className="input mb-3"
           onChange={handleChange}
         />
 
         <input
           name="email"
           placeholder="Email"
-          className="w-full mb-3 p-2 border"
+          className="input mb-3"
           onChange={handleChange}
         />
 
@@ -52,12 +58,12 @@ export default function Register() {
           name="password"
           type="password"
           placeholder="Password"
-          className="w-full mb-3 p-2 border"
+          className="input mb-3"
           onChange={handleChange}
         />
 
-        <button className="w-full bg-green-500 text-white p-2">
-          Register
+        <button className="btn btn-primary w-full">
+          {loading ? "Processing..." : "Register"}
         </button>
 
         <p className="mt-3 text-sm">

@@ -57,6 +57,7 @@
 ## 🟡 Medium Priority
 - [x] UI improvements (basic functional layout)
 - [x] UI polishing pass (design system, cards, status indicators, clean navbars)
+- [x] Premium UX pass (icons, toast notifications, loading states)
 - [ ] Mobile responsiveness
 - [x] Add AI Detector frontend page (`/ai`)
 - [x] Add Knowledge Hub list/detail frontend routes (`/articles`, `/articles/:id`)

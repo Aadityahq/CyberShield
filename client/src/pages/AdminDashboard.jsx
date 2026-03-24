@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import axios from 'axios'
 
 export default function AdminDashboard() {
@@ -56,7 +57,7 @@ export default function AdminDashboard() {
       })
       setUsers(users.filter(u => u._id !== userId))
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to delete user')
+      toast.error(err.response?.data?.message || 'Failed to delete user')
     }
   }
 
@@ -68,7 +69,7 @@ export default function AdminDashboard() {
       })
       setReports(reports.map(r => r._id === reportId ? { ...r, status: newStatus } : r))
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to update report')
+      toast.error(err.response?.data?.message || 'Failed to update report')
     }
   }
 
