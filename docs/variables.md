@@ -4,9 +4,9 @@
 
 ### Environment Variables
 PORT=5000
-MONGO_URI=
-JWT_SECRET=
-AI_SERVICE_URL=
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=supersecretkey
+AI_SERVICE_URL=http://localhost:8000
 
 ---
 

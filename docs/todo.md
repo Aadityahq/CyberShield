@@ -27,16 +27,16 @@
 ---
 
 ### Phase 4: AI Integration
-- [ ] Create Python API
-- [ ] Implement scam classifier
-- [ ] Connect backend to AI API
+- [x] Create Python API
+- [x] Implement scam classifier
+- [x] Connect backend to AI API
 
 ---
 
 ### Phase 5: Knowledge Hub
-- [ ] Create article model
-- [ ] Add article API (admin)
-- [ ] Fetch articles API
+- [x] Create article model
+- [x] Add article API (admin)
+- [x] Fetch articles API
 
 ---
 
