@@ -38,6 +38,10 @@ Implemented frontend modules:
 - Loading states for submit/analyze/admin actions
 - Frontend auth validation for login/register (email format + minimum password length)
 - Backend auth validation for register/login (required fields + email format + minimum password length)
+- Frontend input sanitization utility for XSS prevention (light layer)
+- Backend global security middleware: helmet (secure headers), xss-clean, express-mongo-sanitize
+- Backend request validation/sanitization on auth and report endpoints using express-validator
+- NoSQL injection prevention with express-mongo-sanitize middleware
 
 ## Active Services
 

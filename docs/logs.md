@@ -103,6 +103,18 @@
 - Upgraded AI predictor service logic to scoring-based keyword detection
 - Added triage prediction output classes in AI service: SAFE, SUSPICIOUS, MALICIOUS
 
+## Day 17
+- Installed security packages: helmet, xss-clean, express-validator, express-mongo-sanitize
+- Added global security middleware to app.js: helmet (secure headers), xss-clean (XSS prevention), mongo-sanitize (NoSQL injection prevention)
+- Added express-validator middleware to auth routes for request validation/sanitization (name, email, password)
+- Added validation error handling in auth controller (register/login)
+- Added express-validator middleware to report routes for request validation/sanitization (title, description, category)
+- Added validation error handling in report controller (createReport)
+- Created frontend sanitizer utility (`utils/sanitizer.js`) with cleanInput and sanitizeObject functions
+- Updated auth pages (Login/Register) to use frontend sanitizer before API calls
+- Updated CreateReport page to use frontend sanitizer before API calls
+- Comprehensive AppSec layer complete: backend validation, sanitization, injection prevention, frontend light layer
+
 ---
 
 ## Notes

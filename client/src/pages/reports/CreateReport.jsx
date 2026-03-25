@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import API from "../../services/api";
+import { sanitizeObject } from "../../utils/sanitizer";
 import Navbar from "../../components/layout/Navbar";
 
 export default function CreateReport() {
@@ -20,7 +21,8 @@ export default function CreateReport() {
     setLoading(true);
 
     try {
-      await API.post("/reports", form);
+      const sanitized = sanitizeObject(form);
+      await API.post("/reports", sanitized);
       toast.success("Report submitted!");
       setForm({ title: "", description: "", category: "SCAM" });
     } catch (error) {

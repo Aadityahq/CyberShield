@@ -59,6 +59,12 @@
 - [x] UI polishing pass (design system, cards, status indicators, clean navbars)
 - [x] Premium UX pass (icons, toast notifications, loading states)
 - [x] Add frontend + backend auth input validation (email format, required fields, password length)
+- [x] Application Security (AppSec) implementation:
+  - [x] Global security middleware (helmet, xss-clean, mongo-sanitize)
+  - [x] Request validation/sanitization on auth endpoints (express-validator)
+  - [x] Request validation/sanitization on report endpoints (express-validator)
+  - [x] Frontend input sanitization utility (XSS prevention light layer)
+  - [x] NoSQL injection prevention (express-mongo-sanitize middleware)
 - [ ] Mobile responsiveness
 - [x] Add AI Detector frontend page (`/ai`)
 - [x] Add Knowledge Hub list/detail frontend routes (`/articles`, `/articles/:id`)

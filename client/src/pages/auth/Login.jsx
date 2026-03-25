@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import API from "../../services/api";
+import { sanitizeObject } from "../../utils/sanitizer";
 
 const isValidEmail = (email) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -32,7 +33,8 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { data } = await API.post("/auth/login", form);
+      const sanitized = sanitizeObject(form);
+      const { data } = await API.post("/auth/login", sanitized);
 
       localStorage.setItem("user", JSON.stringify(data));
       toast.success("Login successful");

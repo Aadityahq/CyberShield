@@ -113,3 +113,32 @@ Backend (register/login endpoints):
 - required fields must be present
 - email must match basic email regex
 - password length must be at least 6 (register)
+
+---
+
+## Backend Security Middleware (Current)
+
+Global middleware stack (app.js):
+- helmet(): Secure HTTP headers (disable XSS reflection, content sniffing, etc.)
+- xss-clean(): Remove malicious script injection attempts
+- express-mongo-sanitize(): Remove $ and . from req.body to prevent NoSQL injection queries like { "$gt": "" }
+- cors(): Cross-origin resource sharing
+- express.json(): Parse JSON bodies
+
+Route-level middleware (auth/report endpoints):
+- body().trim().escape(): Remove leading/trailing spaces, escape HTML
+- body().isEmail().normalizeEmail(): Validate email format and normalize
+- body().isLength({ min: 6 }): Enforce minimum length
+- body().isIn([...]): Whitelist valid category values
+- validationResult(): Check for validation errors before processing
+
+---
+
+## Frontend Security Utilities (Current)
+
+sanitizer.js functions:
+- cleanInput(text): Remove HTML tags and script injection attempts
+- sanitizeObject(obj): Clean all string values in an object before API send
+
+Usage in forms:
+- Login/Register/CreateReport pages sanitize form data before API.post()

@@ -1,8 +1,14 @@
 import Report from "../models/Report.js";
+import { validationResult } from "express-validator";
 
 // Create Report
 export const createReport = async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { title, description, category, evidence } = req.body;
 
     const report = await Report.create({
