@@ -88,3 +88,28 @@ RESOLVED
 SAFE
 SUSPICIOUS
 MALICIOUS
+
+---
+
+## AI Predictor Rules (Current)
+
+SCAM_KEYWORDS includes:
+win, lottery, prize, claim, urgent, click, verify, otp, bank, free, offer, link, account, suspended
+
+Classification thresholds:
+- score >= 3 => MALICIOUS (confidence 0.9)
+- score == 2 => SUSPICIOUS (confidence 0.6)
+- score <= 1 => SAFE (confidence 0.8)
+
+---
+
+## Auth Validation Rules (Current)
+
+Frontend (Login/Register):
+- email must match basic email regex
+- password length must be at least 6
+
+Backend (register/login endpoints):
+- required fields must be present
+- email must match basic email regex
+- password length must be at least 6 (register)

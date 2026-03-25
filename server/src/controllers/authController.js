@@ -2,10 +2,26 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/generateToken.js";
 
+const isValidEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
 // Register
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password too short" });
+    }
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -36,6 +52,14 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
 
     const user = await User.findOne({ email });
 

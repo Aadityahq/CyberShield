@@ -3,6 +3,10 @@ import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import API from "../../services/api";
 
+const isValidEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
 export default function Register() {
   const [form, setForm] = useState({
     name: "",
@@ -19,6 +23,22 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!form.name.trim() || !form.email.trim() || !form.password) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (!isValidEmail(form.email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
     setLoading(true);
 
     try {

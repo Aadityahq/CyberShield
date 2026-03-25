@@ -16,6 +16,8 @@ Implemented AI module:
 
 - FastAPI service with /api/predict
 - MVP scam classifier (keyword-based)
+- Upgraded keyword scoring classifier with tiered outputs (SAFE / SUSPICIOUS / MALICIOUS)
+- Confidence mapping: SAFE 0.8, SUSPICIOUS 0.6, MALICIOUS 0.9
 
 Implemented frontend modules:
 
@@ -34,6 +36,8 @@ Implemented frontend modules:
 - Lucide icons integrated for premium navigation and dashboard hierarchy
 - Toast notifications (`react-hot-toast`) replacing alert popups
 - Loading states for submit/analyze/admin actions
+- Frontend auth validation for login/register (email format + minimum password length)
+- Backend auth validation for register/login (required fields + email format + minimum password length)
 
 ## Active Services
 

@@ -97,6 +97,12 @@
 - Upgraded AI result card with gradient severity styling for demo impact
 - Verified frontend startup after premium UI integration
 
+## Day 16
+- Added frontend validation for login/register forms (email format + password length guard)
+- Added backend validation in auth controller for register/login (required fields, email format, password length)
+- Upgraded AI predictor service logic to scoring-based keyword detection
+- Added triage prediction output classes in AI service: SAFE, SUSPICIOUS, MALICIOUS
+
 ---
 
 ## Notes
