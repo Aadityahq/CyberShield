@@ -28,11 +28,19 @@ PUT /api/reports/:id
 
 POST /api/ai/predict
 
+### Reports
+
+POST /api/reports (with file upload: multipart/form-data)
+GET /api/reports
+PUT /api/reports/:id
+
 ### Articles
 
-POST /api/articles
-GET /api/articles
-GET /api/articles/:id
+POST /api/articles (user-submitted, status PENDING)
+GET /api/articles (public, status APPROVED only)
+GET /api/articles/:id (public, status APPROVED only)
+GET /api/articles/admin/pending (admin only, status PENDING)
+PUT /api/articles/:id/status (admin only, update status)
 
 ### Admin
 
@@ -142,3 +150,55 @@ sanitizer.js functions:
 
 Usage in forms:
 - Login/Register/CreateReport pages sanitize form data before API.post()
+
+---
+
+## Report Model Fields (Current)
+
+- title (string, required)
+- description (string, required)
+- category (enum: PHISHING, SCAM, HARASSMENT, OTHER)
+- severity (enum: LOW, MEDIUM, HIGH, default: LOW)
+- contactEmail (string, optional)
+- evidence (string, optional, file path from upload)
+- status (enum: PENDING, REVIEWED, RESOLVED, default: PENDING)
+- user (ref to User)
+- timestamps (createdAt, updatedAt)
+
+---
+
+## Article Model Fields (Current)
+
+- title (string, required)
+- content (string, required)
+- category (enum: PHISHING, SCAM, PRIVACY, GENERAL, default: GENERAL)
+- createdBy (ref to User)
+- status (enum: PENDING, APPROVED, REJECTED, default: PENDING)
+- timestamps (createdAt, updatedAt)
+
+---
+
+## File Upload Configuration (Current)
+
+Multer storage settings:
+- destination: /uploads directory (relative to server root)
+- filename: Date.now() + "-" + originalname
+- file types allowed: JPEG, PNG, GIF, PDF
+- static serving: /uploads endpoint serves files from uploads folder
+
+---
+
+## Article Workflow Status (Current)
+
+User submits article:
+- Created with status: PENDING
+- Hidden from public API
+
+Admin reviews:
+- API: GET /api/articles/admin/pending (list all pending)
+- API: PUT /api/articles/:id/status { status: "APPROVED" | "REJECTED" }
+- UI: ManageArticles page with Pending & Published tabs
+
+Public access:
+- Only APPROVED articles returned from GET /api/articles
+- Only APPROVED articles viewable from GET /api/articles/:id

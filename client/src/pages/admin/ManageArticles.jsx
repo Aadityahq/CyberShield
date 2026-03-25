@@ -2,16 +2,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import API from "../../services/api";
 import AdminNavbar from "../../components/layout/AdminNavbar";
+import { CheckCircle, XCircle, Trash2 } from "lucide-react";
 
 export default function ManageArticles() {
-  const [articles, setArticles] = useState([]);
-  const [form, setForm] = useState({
-    title: "",
-    content: "",
-    category: "GENERAL"
-  });
-  const [creating, setCreating] = useState(false);
-  const [deletingId, setDeletingId] = useState(null);
+  const [allArticles, setAllArticles] = useState([]);
+  const [pendingArticles, setPendingArticles] = useState([]);
+  const [activeTab, setActiveTab] = useState("pending");
+  const [processing, setProcessing] = useState({});
 
   useEffect(() => {
     fetchArticles();
@@ -19,32 +16,34 @@ export default function ManageArticles() {
 
   const fetchArticles = async () => {
     try {
-      const { data } = await API.get("/articles");
-      setArticles(data);
+      const [pendingRes, allRes] = await Promise.all([
+        API.get("/articles/admin/pending"),
+        API.get("/articles")
+      ]);
+      setPendingArticles(pendingRes.data);
+      setAllArticles(allRes.data);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to fetch articles");
     }
   };
 
-  const createArticle = async (e) => {
-    e.preventDefault();
-    setCreating(true);
-
+  const updateArticleStatus = async (id, status) => {
+    setProcessing({ ...processing, [id]: true });
     try {
-      await API.post("/articles", form);
-      toast.success("Article added");
-      setForm({ title: "", content: "", category: "GENERAL" });
+      await API.put(`/articles/${id}/status`, { status });
+      toast.success(`Article ${status.toLowerCase()}`);
       fetchArticles();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create article");
+      toast.error("Failed to update article");
     } finally {
-      setCreating(false);
+      setProcessing({ ...processing, [id]: false });
     }
   };
 
   const deleteArticle = async (id) => {
-    setDeletingId(id);
+    setProcessing({ ...processing, [id]: true });
     try {
       await API.delete(`/admin/articles/${id}`);
       toast.success("Article deleted");
@@ -53,7 +52,7 @@ export default function ManageArticles() {
       console.error(error);
       toast.error("Failed to delete article");
     } finally {
-      setDeletingId(null);
+      setProcessing({ ...processing, [id]: false });
     }
   };
 
@@ -64,53 +63,89 @@ export default function ManageArticles() {
       <div className="p-6">
         <h2 className="text-xl mb-4">Manage Articles</h2>
 
-        <form onSubmit={createArticle} className="card mb-6">
-          <input
-            placeholder="Title"
-            className="input"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-          />
-          <textarea
-            placeholder="Content"
-            className="input"
-            value={form.content}
-            onChange={(e) => setForm({ ...form, content: e.target.value })}
-          />
-          <select
-            className="input"
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
+        <div className="flex gap-3 mb-6">
+          <button
+            onClick={() => setActiveTab("pending")}
+            className={`px-4 py-2 rounded ${activeTab === "pending" ? "btn btn-primary" : "btn"}`}
           >
-            <option value="GENERAL">General</option>
-            <option value="PHISHING">Phishing</option>
-            <option value="SCAM">Scam</option>
-            <option value="PRIVACY">Privacy</option>
-          </select>
-          <button className="btn btn-primary">
-            {creating ? "Processing..." : "Add Article"}
+            Pending ({pendingArticles.length})
           </button>
-        </form>
+          <button
+            onClick={() => setActiveTab("published")}
+            className={`px-4 py-2 rounded ${activeTab === "published" ? "btn btn-primary" : "btn"}`}
+          >
+            Published ({allArticles.length})
+          </button>
+        </div>
 
-        {articles.length === 0 ? (
-          <div className="card text-gray-500">No articles found.</div>
-        ) : (
-          articles.map((a) => (
-            <div key={a._id} className="card mb-3 flex items-center justify-between gap-3">
-              <div>
-                <h3 className="font-semibold">{a.title}</h3>
-                <p className="text-sm text-gray-500">{a.category}</p>
+        {activeTab === "pending" && (
+          <div>
+            {pendingArticles.length === 0 ? (
+              <div className="card text-gray-500 text-center py-8">
+                No pending articles.
               </div>
+            ) : (
+              pendingArticles.map((a) => (
+                <div key={a._id} className="card mb-4">
+                  <h3 className="font-semibold text-lg">{a.title}</h3>
+                  <p className="text-sm text-gray-500 mb-2">{a.category}</p>
+                  <p className="text-sm mb-3">{a.content.substring(0, 150)}...</p>
+                  {a.createdBy && (
+                    <p className="text-xs text-gray-400 mb-3">
+                      <strong>Submitted by:</strong> {a.createdBy.name} ({a.createdBy.email})
+                    </p>
+                  )}
 
-              <button
-                onClick={() => deleteArticle(a._id)}
-                className="btn btn-danger"
-                disabled={deletingId === a._id}
-              >
-                {deletingId === a._id ? "Processing..." : "Delete"}
-              </button>
-            </div>
-          ))
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => updateArticleStatus(a._id, "APPROVED")}
+                      disabled={processing[a._id]}
+                      className="btn btn-primary flex items-center gap-2"
+                    >
+                      <CheckCircle size={16} />
+                      {processing[a._id] ? "Processing..." : "Approve"}
+                    </button>
+                    <button
+                      onClick={() => updateArticleStatus(a._id, "REJECTED")}
+                      disabled={processing[a._id]}
+                      className="btn btn-danger flex items-center gap-2"
+                    >
+                      <XCircle size={16} />
+                      {processing[a._id] ? "Processing..." : "Reject"}
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {activeTab === "published" && (
+          <div>
+            {allArticles.length === 0 ? (
+              <div className="card text-gray-500 text-center py-8">
+                No articles published yet.
+              </div>
+            ) : (
+              allArticles.map((a) => (
+                <div key={a._id} className="card mb-3 flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="font-semibold">{a.title}</h3>
+                    <p className="text-sm text-gray-500">{a.category}</p>
+                  </div>
+
+                  <button
+                    onClick={() => deleteArticle(a._id)}
+                    className="btn btn-danger flex items-center gap-2"
+                    disabled={processing[a._id]}
+                  >
+                    <Trash2 size={16} />
+                    {processing[a._id] ? "Processing..." : "Delete"}
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
         )}
       </div>
     </>

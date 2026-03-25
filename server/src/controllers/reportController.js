@@ -9,14 +9,17 @@ export const createReport = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, description, category, evidence } = req.body;
+    const { title, description, category, severity, contactEmail } = req.body;
+    const evidencePath = req.file ? `/uploads/${req.file.filename}` : null;
 
     const report = await Report.create({
       user: req.user._id,
       title,
       description,
       category,
-      evidence
+      severity: severity || "LOW",
+      contactEmail,
+      evidence: evidencePath
     });
 
     res.status(201).json(report);

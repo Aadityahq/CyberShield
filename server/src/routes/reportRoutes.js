@@ -8,16 +8,20 @@ import {
 
 import { protect } from "../middlewares/authMiddleware.js";
 import { adminOnly } from "../middlewares/roleMiddleware.js";
+import { upload } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
 router.post(
   "/",
   protect,
+  upload.single("evidence"),
   [
     body("title").trim().escape().notEmpty().withMessage("Title required"),
     body("description").trim().escape().notEmpty().withMessage("Description required"),
-    body("category").isIn(["PHISHING", "SCAM", "HARASSMENT", "OTHER"]).withMessage("Invalid category")
+    body("category").isIn(["PHISHING", "SCAM", "HARASSMENT", "OTHER"]).withMessage("Invalid category"),
+    body("severity").optional().isIn(["LOW", "MEDIUM", "HIGH"]).withMessage("Invalid severity"),
+    body("contactEmail").optional().isEmail().withMessage("Invalid email")
   ],
   createReport
 );

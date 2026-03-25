@@ -22,7 +22,8 @@
 - [x] Create report model
 - [x] Submit report API
 - [x] Fetch reports API
-- [ ] Upload evidence (optional)
+- [x] Upload evidence (file upload with multer)
+- [x] Enhanced report fields (severity, contact email)
 
 ---
 
@@ -37,6 +38,8 @@
 - [x] Create article model
 - [x] Add article API (admin)
 - [x] Fetch articles API
+- [x] User-submitted articles with approval workflow
+- [x] Admin moderation system
 
 ---
 
@@ -65,6 +68,16 @@
   - [x] Request validation/sanitization on report endpoints (express-validator)
   - [x] Frontend input sanitization utility (XSS prevention light layer)
   - [x] NoSQL injection prevention (express-mongo-sanitize middleware)
+- [x] File upload system for reports (evidence):
+  - [x] Multer package and upload middleware
+  - [x] Report model enhancements (severity, contactEmail, evidence path)
+  - [x] Frontend form with file input and FormData submission
+  - [x] Evidence display in report detail pages
+- [x] User-submitted content system:
+  - [x] Article submission by authenticated users
+  - [x] Admin approval workflow
+  - [x] Status-based filtering (PUBLIC vs PENDING vs REJECTED)
+  - [x] Admin moderation UI with approve/reject buttons
 - [ ] Mobile responsiveness
 - [x] Add AI Detector frontend page (`/ai`)
 - [x] Add Knowledge Hub list/detail frontend routes (`/articles`, `/articles/:id`)

@@ -23,6 +23,14 @@ const reportSchema = new mongoose.Schema(
     evidence: {
       type: String
     },
+    severity: {
+      type: String,
+      enum: ["LOW", "MEDIUM", "HIGH"],
+      default: "LOW"
+    },
+    contactEmail: {
+      type: String
+    },
     status: {
       type: String,
       enum: ["PENDING", "REVIEWED", "RESOLVED"],

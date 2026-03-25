@@ -97,11 +97,42 @@
 - Upgraded AI result card with gradient severity styling for demo impact
 - Verified frontend startup after premium UI integration
 
-## Day 16
+## Day 17
 - Added frontend validation for login/register forms (email format + password length guard)
 - Added backend validation in auth controller for register/login (required fields, email format, password length)
 - Upgraded AI predictor service logic to scoring-based keyword detection
 - Added triage prediction output classes in AI service: SAFE, SUSPICIOUS, MALICIOUS
+- Installed security packages: helmet, xss-clean, express-validator, express-mongo-sanitize
+- Added global security middleware to app.js: helmet (secure headers), xss-clean (XSS prevention), mongo-sanitize (NoSQL injection prevention)
+- Added express-validator middleware to auth routes for request validation/sanitization (name, email, password)
+- Added validation error handling in auth controller (register/login)
+- Added express-validator middleware to report routes for request validation/sanitization (title, description, category)
+- Added validation error handling in report controller (createReport)
+- Created frontend sanitizer utility (`utils/sanitizer.js`) with cleanInput and sanitizeObject functions
+- Updated auth pages (Login/Register) to use frontend sanitizer before API calls
+- Updated CreateReport page to use frontend sanitizer before API calls
+- Comprehensive AppSec layer complete: backend validation, sanitization, injection prevention, frontend light layer
+
+## Day 18
+- Installed multer for file upload handling
+- Created upload middleware with file type filtering (images, PDFs)
+- Created uploads directory for file storage
+- Updated app.js to serve static files from /uploads path
+- Enhanced Report model with severity (LOW/MEDIUM/HIGH) and contactEmail fields
+- Added validation/sanitization for severity and contactEmail in report routes
+- Updated report controller to handle file uploads and save evidence file paths
+- Enhanced Article model with status field (PENDING/APPROVED/REJECTED) for approval workflow
+- Updated article routes to allow any authenticated user to submit articles
+- Added admin-only endpoints: GET /articles/admin/pending, PUT /articles/:id/status
+- Updated article controller to set status PENDING for user submissions and only show APPROVED articles publicly
+- Enhanced getArticles to populate creator info and filter by approval status
+- Updated CreateReport form to include severity dropdown, contact email, and file upload
+- Updated CreateReport to use FormData for multipart file uploads
+- Enhanced ViewReports to display severity badges, contact email, and evidence images/documents
+- Updated Articles page to include user article submission form with toggle
+- Redesigned ManageArticles admin page with two tabs: pending articles (approve/reject) and published articles (delete)
+- Added admin approval/rejection workflow with side-by-side buttons and creator contact info
+- Industry-level feature set complete: user-generated content + file uploads + admin moderation
 
 ## Day 17
 - Installed security packages: helmet, xss-clean, express-validator, express-mongo-sanitize

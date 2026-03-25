@@ -24,6 +24,7 @@ Backend (Auth APIs):
 - Password must be at least 6 characters on register
 - Input sanitization and HTML escaping on all auth fields
 - Report title, description, and category validation with sanitization
+- Report severity and contactEmail optional validation
 
 AI Predictor:
 
@@ -40,3 +41,30 @@ Backend:
 Frontend:
 - Utility sanitizer module for light-layer XSS prevention (HTML tag removal)
 - Auth and report forms sanitize user input before API calls
+
+## File Upload System
+
+Backend:
+- Multer storage configured for disk storage in /uploads directory
+- File type filtering: JPEG, PNG, GIF, PDF
+- Static file serving via Express on /uploads endpoint
+- Report evidence stored as file path in database
+
+Frontend:
+- CreateReport form includes optional file input
+- FormData used for multipart/form-data submissions
+- Evidence preview in ViewReports (images inline, PDFs as links)
+
+## User-Generated Content & Moderation
+
+Backend:
+- Articles can be submitted by any authenticated user
+- User submissions created with status: PENDING
+- Admin endpoints for viewing pending articles and approving/rejecting
+- Public API only returns APPROVED articles
+
+Frontend:
+- Articles page includes submission form toggle
+- Knowledge Hub shows only approved published articles
+- Admin ManageArticles page with Pending vs Published tabs
+- Approve/Reject buttons for pending content with creator contact info

@@ -8,12 +8,20 @@ export default function CreateReport() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    category: "SCAM"
+    category: "SCAM",
+    severity: "LOW",
+    contactEmail: "",
+    evidence: null
   });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      setForm({ ...form, [name]: files[0] });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -21,12 +29,21 @@ export default function CreateReport() {
     setLoading(true);
 
     try {
-      const sanitized = sanitizeObject(form);
-      await API.post("/reports", sanitized);
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("description", form.description);
+      formData.append("category", form.category);
+      formData.append("severity", form.severity);
+      if (form.contactEmail) formData.append("contactEmail", form.contactEmail);
+      if (form.evidence) formData.append("evidence", form.evidence);
+
+      await API.post("/reports", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
       toast.success("Report submitted!");
-      setForm({ title: "", description: "", category: "SCAM" });
+      setForm({ title: "", description: "", category: "SCAM", severity: "LOW", contactEmail: "", evidence: null });
     } catch (error) {
-      toast.error("Something went wrong!");
+      toast.error(error.response?.data?.message || "Something went wrong!");
     } finally {
       setLoading(false);
     }
@@ -36,7 +53,7 @@ export default function CreateReport() {
     <>
       <Navbar />
 
-      <div className="p-6 max-w-md mx-auto">
+      <div className="p-6 max-w-2xl mx-auto">
         <form className="card" onSubmit={handleSubmit}>
           <h2 className="text-lg mb-4 font-semibold">Create Report</h2>
 
@@ -46,6 +63,7 @@ export default function CreateReport() {
             className="input"
             value={form.title}
             onChange={handleChange}
+            required
           />
 
           <textarea
@@ -54,6 +72,7 @@ export default function CreateReport() {
             className="input"
             value={form.description}
             onChange={handleChange}
+            required
           />
 
           <select
@@ -67,6 +86,37 @@ export default function CreateReport() {
             <option value="HARASSMENT">Harassment</option>
             <option value="OTHER">Other</option>
           </select>
+
+          <select
+            name="severity"
+            className="input"
+            value={form.severity}
+            onChange={handleChange}
+          >
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+          </select>
+
+          <input
+            type="email"
+            name="contactEmail"
+            placeholder="Contact Email (optional)"
+            className="input"
+            value={form.contactEmail}
+            onChange={handleChange}
+          />
+
+          <label className="block mb-3">
+            <span className="text-sm font-semibold mb-2 block">Upload Evidence (optional)</span>
+            <input
+              type="file"
+              name="evidence"
+              className="input"
+              onChange={handleChange}
+              accept="image/*,.pdf"
+            />
+          </label>
 
           <button className="btn btn-primary w-full">
             {loading ? "Processing..." : "Submit Report"}

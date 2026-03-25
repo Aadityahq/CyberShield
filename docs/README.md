@@ -24,8 +24,11 @@ Implemented frontend modules:
 - Auth pages (Login/Register)
 - User Dashboard (navigation hub)
 - Report pages (Create Report, View Reports)
+- Enhanced reports with file upload (evidence), severity levels, and contact email
+- Report detail view with evidence image/document viewing
 - AI Detector page (`/ai`)
-- Knowledge Hub pages (Articles list + Article detail)
+- Knowledge Hub pages (Articles list + Article detail + user submission form)
+- User-submitted article submission with approval workflow
 - Admin pages (Dashboard, Manage Reports, Manage Users, Manage Articles)
 - Protected routing with PrivateRoute
 - Shared API service with auth interceptor
@@ -42,6 +45,13 @@ Implemented frontend modules:
 - Backend global security middleware: helmet (secure headers), xss-clean, express-mongo-sanitize
 - Backend request validation/sanitization on auth and report endpoints using express-validator
 - NoSQL injection prevention with express-mongo-sanitize middleware
+- File upload system via multer for report evidence (images/PDFs)
+- Enhanced Report model with severity, contactEmail, and evidence file path
+- User-submitted articles with admin approval workflow
+- Article model with status field (PENDING, APPROVED, REJECTED)
+- Admin moderation interface for pending article review
+- Public API only shows approved articles
+- Admin endpoints for pending article management and status updates
 
 ## Active Services
 
