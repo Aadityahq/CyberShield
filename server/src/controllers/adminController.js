@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Report from "../models/Report.js";
 import Article from "../models/Article.js";
+import { decrypt } from "../utils/encryption.js";
 
 // Dashboard stats
 export const getDashboardStats = async (req, res) => {
@@ -58,7 +59,15 @@ export const getAllReportsAdmin = async (req, res) => {
       .populate("user", "name email")
       .sort({ createdAt: -1 });
 
-    res.json(reports);
+    const safeReports = reports.map((report) => {
+      const item = report.toObject();
+      if (item.isSensitive) {
+        item.description = decrypt(item.description);
+      }
+      return item;
+    });
+
+    res.json(safeReports);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

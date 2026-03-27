@@ -1,6 +1,7 @@
 import Report from "../models/Report.js";
 import { validationResult } from "express-validator";
 import Notification from "../models/Notification.js";
+import { encrypt, decrypt } from "../utils/encryption.js";
 
 // Create Report
 export const createReport = async (req, res) => {
@@ -22,11 +23,12 @@ export const createReport = async (req, res) => {
     const evidencePath = req.file ? `/uploads/${req.file.filename}` : null;
     const anonymousFlag = isAnonymous === true || isAnonymous === "true";
     const sensitiveFlag = isSensitive === true || isSensitive === "true";
+    const safeDescription = sensitiveFlag ? encrypt(description) : description;
 
     const report = await Report.create({
       user: anonymousFlag ? null : req.user._id,
       title,
-      description,
+      description: safeDescription,
       category,
       severity: severity || "LOW",
       contactEmail,
@@ -58,7 +60,15 @@ export const getReports = async (req, res) => {
       .populate("user", "name")
       .sort({ createdAt: -1 });
 
-    res.json(reports);
+    const safeReports = reports.map((report) => {
+      const item = report.toObject();
+      if (item.isSensitive) {
+        item.description = decrypt(item.description);
+      }
+      return item;
+    });
+
+    res.json(safeReports);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
