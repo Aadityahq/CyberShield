@@ -1,5 +1,6 @@
 import Report from "../models/Report.js";
 import { validationResult } from "express-validator";
+import Notification from "../models/Notification.js";
 
 // Create Report
 export const createReport = async (req, res) => {
@@ -39,6 +40,11 @@ export const createReport = async (req, res) => {
       report.user = null;
     }
 
+    await Notification.create({
+      message: "New report submitted",
+      type: "REPORT"
+    });
+
     res.status(201).json(report);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -75,6 +81,11 @@ export const updateReportStatus = async (req, res) => {
       date: new Date()
     });
     await report.save();
+
+    await Notification.create({
+      message: `Report marked as ${newStatus}`,
+      type: "REPORT"
+    });
 
     res.json(report);
   } catch (error) {

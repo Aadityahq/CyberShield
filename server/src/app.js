@@ -12,6 +12,7 @@ import aiRoutes from "./routes/aiRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import forumRoutes from "./routes/forumRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -36,6 +37,7 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/forum", forumRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Health check
 app.get("/", (req, res) => {

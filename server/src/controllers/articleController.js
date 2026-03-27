@@ -1,5 +1,6 @@
 import Article from "../models/Article.js";
 import { validationResult } from "express-validator";
+import Notification from "../models/Notification.js";
 
 // Create Article (Any authenticated user)
 export const createArticle = async (req, res) => {
@@ -17,6 +18,11 @@ export const createArticle = async (req, res) => {
       category,
       createdBy: req.user._id,
       status: "PENDING"
+    });
+
+    await Notification.create({
+      message: "New article submitted for review",
+      type: "ARTICLE"
     });
 
     res.status(201).json(article);
