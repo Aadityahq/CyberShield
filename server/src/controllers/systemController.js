@@ -2,6 +2,48 @@ import ClientErrorLog from "../models/ClientErrorLog.js";
 import { validationResult } from "express-validator";
 import { sendError, sendSuccess } from "../utils/response.js";
 
+const buildClientErrorQuery = ({ source, statusCode, q, fromDate, toDate }) => {
+  const query = {};
+
+  if (["UI", "API"].includes(source)) {
+    query.source = source;
+  }
+
+  if (statusCode && !Number.isNaN(Number(statusCode))) {
+    query.statusCode = Number(statusCode);
+  }
+
+  if (q) {
+    query.$or = [
+      { message: { $regex: q, $options: "i" } },
+      { path: { $regex: q, $options: "i" } },
+      { method: { $regex: q, $options: "i" } }
+    ];
+  }
+
+  if (fromDate || toDate) {
+    query.createdAt = {};
+
+    if (fromDate) {
+      query.createdAt.$gte = new Date(fromDate);
+    }
+
+    if (toDate) {
+      const end = new Date(toDate);
+      end.setHours(23, 59, 59, 999);
+      query.createdAt.$lte = end;
+    }
+  }
+
+  return query;
+};
+
+const csvEscape = (value) => {
+  if (value === undefined || value === null) return "";
+  const text = String(value).replace(/\r?\n|\r/g, " ");
+  return `"${text.replace(/"/g, '""')}"`;
+};
+
 export const logClientError = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -50,24 +92,9 @@ export const getClientErrors = async (req, res) => {
     const source = req.query.source;
     const statusCode = req.query.statusCode;
     const q = req.query.q?.trim();
-
-    const query = {};
-
-    if (["UI", "API"].includes(source)) {
-      query.source = source;
-    }
-
-    if (statusCode && !Number.isNaN(Number(statusCode))) {
-      query.statusCode = Number(statusCode);
-    }
-
-    if (q) {
-      query.$or = [
-        { message: { $regex: q, $options: "i" } },
-        { path: { $regex: q, $options: "i" } },
-        { method: { $regex: q, $options: "i" } }
-      ];
-    }
+    const fromDate = req.query.fromDate;
+    const toDate = req.query.toDate;
+    const query = buildClientErrorQuery({ source, statusCode, q, fromDate, toDate });
 
     const [items, total] = await Promise.all([
       ClientErrorLog.find(query)
@@ -87,6 +114,54 @@ export const getClientErrors = async (req, res) => {
         totalPages: Math.ceil(total / limit) || 1
       }
     });
+  } catch (error) {
+    return sendError(res, 500, error.message);
+  }
+};
+
+export const exportClientErrorsCsv = async (req, res) => {
+  try {
+    const source = req.query.source;
+    const statusCode = req.query.statusCode;
+    const q = req.query.q?.trim();
+    const fromDate = req.query.fromDate;
+    const toDate = req.query.toDate;
+
+    const query = buildClientErrorQuery({ source, statusCode, q, fromDate, toDate });
+
+    const items = await ClientErrorLog.find(query)
+      .sort({ createdAt: -1 })
+      .lean();
+
+    const headers = [
+      "createdAt",
+      "source",
+      "statusCode",
+      "method",
+      "path",
+      "message",
+      "userAgent"
+    ];
+
+    const rows = items.map((item) => [
+      item.createdAt ? new Date(item.createdAt).toISOString() : "",
+      item.source || "",
+      item.statusCode || "",
+      item.method || "",
+      item.path || "",
+      item.message || "",
+      item.userAgent || ""
+    ]);
+
+    const csv = [
+      headers.join(","),
+      ...rows.map((row) => row.map(csvEscape).join(","))
+    ].join("\n");
+
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader("Content-Disposition", `attachment; filename="client-error-logs-${Date.now()}.csv"`);
+
+    return res.status(200).send(csv);
   } catch (error) {
     return sendError(res, 500, error.message);
   }

@@ -12,10 +12,13 @@ export default function ErrorLogs() {
   const [search, setSearch] = useState("");
   const [source, setSource] = useState("ALL");
   const [statusCode, setStatusCode] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     fetchLogs();
-  }, [page, source, statusCode]);
+  }, [page, source, statusCode, fromDate, toDate, search]);
 
   const fetchLogs = async () => {
     try {
@@ -34,6 +37,18 @@ export default function ErrorLogs() {
         params.statusCode = statusCode.trim();
       }
 
+      if (search.trim()) {
+        params.q = search.trim();
+      }
+
+      if (fromDate) {
+        params.fromDate = fromDate;
+      }
+
+      if (toDate) {
+        params.toDate = toDate;
+      }
+
       const { data } = await API.get("/system/client-errors", { params });
       setLogs(data.items || []);
       setTotalPages(data.pagination?.totalPages || 1);
@@ -46,15 +61,52 @@ export default function ErrorLogs() {
     }
   };
 
-  const filteredLogs = logs.filter((log) => {
-    const term = search.toLowerCase();
-    if (!term) return true;
-    return (
-      String(log.message || "").toLowerCase().includes(term) ||
-      String(log.path || "").toLowerCase().includes(term) ||
-      String(log.method || "").toLowerCase().includes(term)
-    );
-  });
+  const exportCsv = async () => {
+    try {
+      setExporting(true);
+
+      const params = {};
+
+      if (source !== "ALL") {
+        params.source = source;
+      }
+
+      if (statusCode.trim()) {
+        params.statusCode = statusCode.trim();
+      }
+
+      if (search.trim()) {
+        params.q = search.trim();
+      }
+
+      if (fromDate) {
+        params.fromDate = fromDate;
+      }
+
+      if (toDate) {
+        params.toDate = toDate;
+      }
+
+      const response = await API.get("/system/client-errors/export", {
+        params,
+        responseType: "blob"
+      });
+
+      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8;" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `client-error-logs-${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <>
@@ -63,13 +115,16 @@ export default function ErrorLogs() {
       <div className="p-6 max-w-6xl mx-auto">
         <h2 className="text-xl font-semibold mb-4">Client Error Logs</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-5">
           <input
             type="text"
             className="input md:col-span-2"
             placeholder="Search message/path/method"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
           />
 
           <select
@@ -95,15 +150,46 @@ export default function ErrorLogs() {
               setPage(1);
             }}
           />
+
+          <input
+            type="date"
+            className="input"
+            value={fromDate}
+            onChange={(e) => {
+              setFromDate(e.target.value);
+              setPage(1);
+            }}
+          />
+
+          <input
+            type="date"
+            className="input"
+            value={toDate}
+            onChange={(e) => {
+              setToDate(e.target.value);
+              setPage(1);
+            }}
+          />
+        </div>
+
+        <div className="flex justify-end mb-4">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={exportCsv}
+            disabled={exporting || loading}
+          >
+            {exporting ? "Exporting..." : "Export CSV"}
+          </button>
         </div>
 
         {loading ? (
           <p>Loading...</p>
-        ) : filteredLogs.length === 0 ? (
+        ) : logs.length === 0 ? (
           <div className="card text-gray-500">No error logs found.</div>
         ) : (
           <div className="space-y-3">
-            {filteredLogs.map((log) => (
+            {logs.map((log) => (
               <div key={log._id} className="card">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">

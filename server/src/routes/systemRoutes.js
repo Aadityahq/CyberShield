@@ -1,12 +1,13 @@
 import express from "express";
 import { body } from "express-validator";
-import { getClientErrors, logClientError } from "../controllers/systemController.js";
+import { exportClientErrorsCsv, getClientErrors, logClientError } from "../controllers/systemController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { adminOnly } from "../middlewares/roleMiddleware.js";
 
 const router = express.Router();
 
 router.get("/client-errors", protect, adminOnly, getClientErrors);
+router.get("/client-errors/export", protect, adminOnly, exportClientErrorsCsv);
 
 router.post(
   "/client-errors",

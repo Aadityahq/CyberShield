@@ -87,6 +87,14 @@
 - [x] Add AI Detector frontend page (`/ai`)
 - [x] Add Knowledge Hub list/detail frontend routes (`/articles`, `/articles/:id`)
 - [x] Split admin frontend into pages (ManageReports, ManageUsers, ManageArticles)
+- [ ] Error Logs UX enhancements:
+  - [ ] Quick filter presets (Last 24h, Last 7 days)
+  - [ ] One-click status filter presets (e.g., Only 5xx)
+- [ ] Bonus marks features:
+  - [ ] Export reports as PDF
+  - [ ] Email notifications (fake/mock service)
+  - [ ] Dark mode (global theme toggle)
+  - [ ] Activity logs (user/admin action trail)
 
 ---
 
