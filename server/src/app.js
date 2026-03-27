@@ -15,6 +15,7 @@ import articleRoutes from "./routes/articleRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import forumRoutes from "./routes/forumRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
+import systemRoutes from "./routes/systemRoutes.js";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -48,6 +49,7 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/forum", forumRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/system", systemRoutes);
 
 // Health check
 app.get("/", (req, res) => {
