@@ -56,12 +56,12 @@ export default function Register() {
 
     try {
       const sanitized = sanitizeObject(form);
-      const { data } = await API.post("/auth/register", sanitized);
+      await API.post("/auth/register", sanitized);
 
-      localStorage.setItem("user", JSON.stringify(data));
-      toast.success("Registration successful");
+      localStorage.setItem("tempEmail", sanitized.email);
+      toast.success("OTP sent to your email");
 
-      navigate("/dashboard");
+      navigate("/verify");
     } catch (error) {
       toast.error(error.response?.data?.message || "Registration failed");
     } finally {
