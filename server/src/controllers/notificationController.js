@@ -1,11 +1,12 @@
 import Notification from "../models/Notification.js";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 export const getNotifications = async (req, res) => {
   try {
     const notifications = await Notification.find().sort({ createdAt: -1 });
-    res.json(notifications);
+    return sendSuccess(res, notifications);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -14,14 +15,14 @@ export const markNotificationRead = async (req, res) => {
     const notification = await Notification.findById(req.params.id);
 
     if (!notification) {
-      return res.status(404).json({ message: "Notification not found" });
+      return sendError(res, 404, "Notification not found");
     }
 
     notification.isRead = true;
     await notification.save();
 
-    res.json(notification);
+    return sendSuccess(res, notification);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };

@@ -1,13 +1,14 @@
 import Article from "../models/Article.js";
 import { validationResult } from "express-validator";
 import Notification from "../models/Notification.js";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 // Create Article (Any authenticated user)
 export const createArticle = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return sendError(res, 400, "Validation failed", errors.array());
     }
 
     const { title, content, category } = req.body;
@@ -25,9 +26,9 @@ export const createArticle = async (req, res) => {
       type: "ARTICLE"
     });
 
-    res.status(201).json(article);
+    return sendSuccess(res, article, 201);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -38,9 +39,9 @@ export const getArticles = async (req, res) => {
       .populate("createdBy", "name")
       .sort({ createdAt: -1 });
 
-    res.json(articles);
+    return sendSuccess(res, articles);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -51,12 +52,12 @@ export const getArticleById = async (req, res) => {
       .populate("createdBy", "name");
 
     if (!article || (article.status !== "APPROVED")) {
-      return res.status(404).json({ message: "Article not found" });
+      return sendError(res, 404, "Article not found");
     }
 
-    res.json(article);
+    return sendSuccess(res, article);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -67,9 +68,9 @@ export const getPendingArticles = async (req, res) => {
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 
-    res.json(articles);
+    return sendSuccess(res, articles);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -79,20 +80,20 @@ export const updateArticleStatus = async (req, res) => {
     const { status } = req.body;
 
     if (!["APPROVED", "REJECTED"].includes(status)) {
-      return res.status(400).json({ message: "Invalid status" });
+      return sendError(res, 400, "Invalid status");
     }
 
     const article = await Article.findById(req.params.id);
 
     if (!article) {
-      return res.status(404).json({ message: "Article not found" });
+      return sendError(res, 404, "Article not found");
     }
 
     article.status = status;
     await article.save();
 
-    res.json(article);
+    return sendSuccess(res, article);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };

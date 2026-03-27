@@ -2,13 +2,14 @@ import Report from "../models/Report.js";
 import { validationResult } from "express-validator";
 import Notification from "../models/Notification.js";
 import { encrypt, decrypt } from "../utils/encryption.js";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 // Create Report
 export const createReport = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return sendError(res, 400, "Validation failed", errors.array());
     }
 
     const {
@@ -47,9 +48,9 @@ export const createReport = async (req, res) => {
       type: "REPORT"
     });
 
-    res.status(201).json(report);
+    return sendSuccess(res, report, 201);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -73,9 +74,9 @@ export const getReports = async (req, res) => {
       return item;
     });
 
-    res.json(safeReports);
+    return sendSuccess(res, safeReports);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -87,7 +88,7 @@ export const updateReportStatus = async (req, res) => {
     const report = await Report.findById(req.params.id);
 
     if (!report) {
-      return res.status(404).json({ message: "Report not found" });
+      return sendError(res, 404, "Report not found");
     }
 
     report.status = newStatus;
@@ -102,8 +103,8 @@ export const updateReportStatus = async (req, res) => {
       type: "REPORT"
     });
 
-    res.json(report);
+    return sendSuccess(res, report);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };

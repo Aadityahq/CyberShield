@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import Report from "../models/Report.js";
 import Article from "../models/Article.js";
 import { decrypt } from "../utils/encryption.js";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 // Dashboard stats
 export const getDashboardStats = async (req, res) => {
@@ -14,14 +15,14 @@ export const getDashboardStats = async (req, res) => {
       status: "PENDING"
     });
 
-    res.json({
+    return sendSuccess(res, {
       totalUsers,
       totalReports,
       totalArticles,
       pendingReports
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -29,9 +30,9 @@ export const getDashboardStats = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
-    res.json(users);
+    return sendSuccess(res, users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -41,14 +42,14 @@ export const deleteUser = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return sendError(res, 404, "User not found");
     }
 
     await user.deleteOne();
 
-    res.json({ message: "User removed" });
+    return sendSuccess(res, { deletedUserId: req.params.id }, 200, "User removed");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -72,9 +73,9 @@ export const getAllReportsAdmin = async (req, res) => {
       return item;
     });
 
-    res.json(safeReports);
+    return sendSuccess(res, safeReports);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -84,14 +85,14 @@ export const deleteArticle = async (req, res) => {
     const article = await Article.findById(req.params.id);
 
     if (!article) {
-      return res.status(404).json({ message: "Article not found" });
+      return sendError(res, 404, "Article not found");
     }
 
     await article.deleteOne();
 
-    res.json({ message: "Article deleted" });
+    return sendSuccess(res, { deletedArticleId: req.params.id }, 200, "Article deleted");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -101,19 +102,19 @@ export const promoteToAdmin = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return sendError(res, 404, "User not found");
     }
 
     if (user.role === "SUPER_ADMIN") {
-      return res.status(400).json({ message: "Cannot modify Super Admin role" });
+      return sendError(res, 400, "Cannot modify Super Admin role");
     }
 
     user.role = "ADMIN";
     await user.save();
 
-    res.json({ message: "User promoted to admin" });
+    return sendSuccess(res, { userId: user._id, role: user.role }, 200, "User promoted to admin");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -123,19 +124,19 @@ export const suspendUser = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return sendError(res, 404, "User not found");
     }
 
     if (user.role === "SUPER_ADMIN") {
-      return res.status(400).json({ message: "Cannot suspend Super Admin" });
+      return sendError(res, 400, "Cannot suspend Super Admin");
     }
 
     user.isSuspended = true;
     await user.save();
 
-    res.json({ message: "User suspended" });
+    return sendSuccess(res, { userId: user._id, isSuspended: user.isSuspended }, 200, "User suspended");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -145,18 +146,18 @@ export const removeAdmin = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return sendError(res, 404, "User not found");
     }
 
     if (user.role !== "ADMIN") {
-      return res.status(400).json({ message: "Not an admin" });
+      return sendError(res, 400, "Not an admin");
     }
 
     user.role = "USER";
     await user.save();
 
-    res.json({ message: "Admin removed" });
+    return sendSuccess(res, { userId: user._id, role: user.role }, 200, "Admin removed");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };

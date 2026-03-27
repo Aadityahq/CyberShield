@@ -1,4 +1,5 @@
 import ForumPost from "../models/ForumPost.js";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 export const createPost = async (req, res) => {
   try {
@@ -8,9 +9,9 @@ export const createPost = async (req, res) => {
       content: req.body.content
     });
 
-    res.status(201).json(post);
+    return sendSuccess(res, post, 201);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -19,7 +20,7 @@ export const addReply = async (req, res) => {
     const post = await ForumPost.findById(req.params.id);
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" });
+      return sendError(res, 404, "Post not found");
     }
 
     post.replies.push({
@@ -28,9 +29,9 @@ export const addReply = async (req, res) => {
     });
 
     await post.save();
-    res.json(post);
+    return sendSuccess(res, post);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -41,8 +42,8 @@ export const getAllPosts = async (req, res) => {
       .populate("replies.user", "name")
       .sort({ createdAt: -1 });
 
-    res.json(posts);
+    return sendSuccess(res, posts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };

@@ -1,4 +1,5 @@
 import { analyzeText } from "../services/aiService.js";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 export const detectScam = async (req, res) => {
   try {
@@ -6,8 +7,8 @@ export const detectScam = async (req, res) => {
 
     const result = await analyzeText(text);
 
-    res.json(result);
+    return sendSuccess(res, result);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };

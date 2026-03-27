@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/generateToken.js";
 import { validationResult } from "express-validator";
+import { sendError, sendSuccess } from "../utils/response.js";
 
 const isValidEmail = (email) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -12,14 +13,14 @@ export const registerUser = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return sendError(res, 400, "Validation failed", errors.array());
     }
 
     const { name, email, password } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      return sendError(res, 400, "User already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -30,15 +31,15 @@ export const registerUser = async (req, res) => {
       password: hashedPassword
     });
 
-    res.status(201).json({
+    return sendSuccess(res, {
       _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
       token: generateToken(user._id)
-    });
+    }, 201);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
 
@@ -47,7 +48,7 @@ export const loginUser = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return sendError(res, 400, "Validation failed", errors.array());
     }
 
     const { email, password } = req.body;
@@ -56,10 +57,10 @@ export const loginUser = async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       if (user.isSuspended) {
-        return res.status(403).json({ message: "Account suspended" });
+        return sendError(res, 403, "Account suspended");
       }
 
-      res.json({
+      return sendSuccess(res, {
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -67,9 +68,9 @@ export const loginUser = async (req, res) => {
         token: generateToken(user._id)
       });
     } else {
-      res.status(401).json({ message: "Invalid credentials" });
+      return sendError(res, 401, "Invalid credentials");
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendError(res, 500, error.message);
   }
 };
