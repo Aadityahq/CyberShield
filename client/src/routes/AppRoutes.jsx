@@ -13,6 +13,7 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import ManageReports from "../pages/admin/ManageReports";
 import ManageUsers from "../pages/admin/ManageUsers";
 import ManageArticles from "../pages/admin/ManageArticles";
+import Notifications from "../pages/admin/Notifications";
 import PrivateRoute from "../components/PrivateRoute";
 
 export default function AppRoutes() {
@@ -61,6 +62,10 @@ export default function AppRoutes() {
         <Route
           path="/admin/articles"
           element={<PrivateRoute adminOnly={true}><ManageArticles /></PrivateRoute>}
+        />
+        <Route
+          path="/admin/notifications"
+          element={<PrivateRoute adminOnly={true}><Notifications /></PrivateRoute>}
         />
       </Routes>
     </BrowserRouter>
