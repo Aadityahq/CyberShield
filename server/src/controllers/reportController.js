@@ -56,9 +56,14 @@ export const createReport = async (req, res) => {
 // Get Reports (User -> own, Admin -> all)
 export const getReports = async (req, res) => {
   try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
     const reports = await Report.find()
       .populate("user", "name")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
 
     const safeReports = reports.map((report) => {
       const item = report.toObject();
