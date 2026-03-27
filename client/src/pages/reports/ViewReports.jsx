@@ -5,19 +5,32 @@ import { AlertCircle, Shield, Mail, Image as ImageIcon, EyeOff, TriangleAlert } 
 
 export default function ViewReports() {
   const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const limit = 10;
 
   useEffect(() => {
     fetchReports();
-  }, []);
+  }, [page]);
 
   const fetchReports = async () => {
     try {
-      const { data } = await API.get("/reports");
+      setLoading(true);
+      const { data } = await API.get(`/reports?page=${page}&limit=${limit}`);
       setReports(data);
+      setHasNextPage(data.length === limit);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  const filteredReports = reports.filter((r) =>
+    r.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   const getSeverityColor = (severity) => {
     switch (severity) {
@@ -52,13 +65,24 @@ export default function ViewReports() {
       <div className="p-6 max-w-4xl mx-auto">
         <h2 className="text-xl mb-6 font-semibold">My Reports</h2>
 
-        {reports.length === 0 ? (
+        <input
+          type="text"
+          placeholder="Search reports by title"
+          className="input mb-4"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : filteredReports.length === 0 ? (
           <div className="card text-center text-gray-500 py-8">
-            No reports submitted yet.
+            No data available
           </div>
         ) : (
-          reports.map((r) => (
-            <div key={r._id} className="card mb-4">
+          <>
+            {filteredReports.map((r) => (
+              <div key={r._id} className="card mb-4">
               <div className="flex items-start justify-between mb-3">
                 <h3 className="font-semibold text-lg flex-1">{r.title}</h3>
                 <span
@@ -142,8 +166,27 @@ export default function ViewReports() {
               <p className="text-xs text-gray-400 mt-4">
                 {new Date(r.createdAt).toLocaleDateString()} {new Date(r.createdAt).toLocaleTimeString()}
               </p>
+              </div>
+            ))}
+
+            <div className="flex justify-between items-center mt-4">
+              <button
+                className="btn"
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={page === 1 || loading}
+              >
+                Previous
+              </button>
+              <span className="text-sm text-gray-500">Page {page}</span>
+              <button
+                className="btn"
+                onClick={() => setPage((prev) => prev + 1)}
+                disabled={!hasNextPage || loading}
+              >
+                Next
+              </button>
             </div>
-          ))
+          </>
         )}
       </div>
     </>

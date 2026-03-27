@@ -6,19 +6,27 @@ import { EyeOff, TriangleAlert } from "lucide-react";
 
 export default function ManageReports() {
   const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const limit = 10;
 
   useEffect(() => {
     fetchReports();
-  }, []);
+  }, [page]);
 
   const fetchReports = async () => {
     try {
-      const { data } = await API.get("/admin/reports");
+      setLoading(true);
+      const { data } = await API.get(`/admin/reports?page=${page}&limit=${limit}`);
       const prioritized = [...data].sort((a, b) => Number(b.isSensitive) - Number(a.isSensitive));
       setReports(prioritized);
+      setHasNextPage(data.length === limit);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,14 +53,17 @@ export default function ManageReports() {
       <div className="p-6">
         <h2 className="text-xl mb-4">All Reports</h2>
 
-        {reports.length === 0 ? (
+        {loading ? (
+          <p>Loading...</p>
+        ) : reports.length === 0 ? (
           <div className="card text-gray-500">No reports found.</div>
         ) : (
-          reports.map((r) => (
-            <div
-              key={r._id}
-              className={`card mb-3 ${r.isSensitive ? "border-2 border-red-400 bg-red-50/40" : ""}`}
-            >
+          <>
+            {reports.map((r) => (
+              <div
+                key={r._id}
+                className={`card mb-3 ${r.isSensitive ? "border-2 border-red-400 bg-red-50/40" : ""}`}
+              >
               <h3 className="font-semibold text-lg">{r.title}</h3>
               <div className="flex flex-wrap gap-2 my-2">
                 {r.isAnonymous && (
@@ -107,8 +118,27 @@ export default function ManageReports() {
                 <option value="REVIEWED">Reviewed</option>
                 <option value="RESOLVED">Resolved</option>
               </select>
+              </div>
+            ))}
+
+            <div className="flex justify-between items-center mt-4">
+              <button
+                className="btn"
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={page === 1 || loading}
+              >
+                Previous
+              </button>
+              <span className="text-sm text-gray-500">Page {page}</span>
+              <button
+                className="btn"
+                onClick={() => setPage((prev) => prev + 1)}
+                disabled={!hasNextPage || loading}
+              >
+                Next
+              </button>
             </div>
-          ))
+          </>
         )}
       </div>
     </>

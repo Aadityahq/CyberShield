@@ -7,6 +7,8 @@ import Navbar from "../../components/layout/Navbar";
 
 export default function Articles() {
   const [articles, setArticles] = useState([]);
+  const [loadingList, setLoadingList] = useState(true);
+  const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -22,12 +24,19 @@ export default function Articles() {
 
   const fetchArticles = async () => {
     try {
+      setLoadingList(true);
       const { data } = await API.get("/articles");
       setArticles(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoadingList(false);
     }
   };
+
+  const filteredArticles = articles.filter((a) =>
+    a.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -56,6 +65,14 @@ export default function Articles() {
 
       <div className="p-6">
         <h2 className="text-xl mb-4">Knowledge Hub</h2>
+
+        <input
+          type="text"
+          placeholder="Search articles by title"
+          className="input mb-4"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
         <button
           onClick={() => setShowForm(!showForm)}
@@ -109,19 +126,25 @@ export default function Articles() {
           </form>
         )}
 
-        {articles.map((a) => (
-          <div
-            key={a._id}
-            className="card mb-3 cursor-pointer hover:scale-[1.02] transition"
-            onClick={() => navigate(`/articles/${a._id}`)}
-          >
-            <h3 className="font-semibold text-lg">{a.title}</h3>
-            <p className="text-sm text-gray-500">{a.category}</p>
-            {a.createdBy && (
-              <p className="text-xs text-gray-400 mt-2">By: {a.createdBy.name}</p>
-            )}
-          </div>
-        ))}
+        {loadingList ? (
+          <p>Loading...</p>
+        ) : filteredArticles.length === 0 ? (
+          <p>No data available</p>
+        ) : (
+          filteredArticles.map((a) => (
+            <div
+              key={a._id}
+              className="card mb-3 cursor-pointer hover:scale-[1.02] transition"
+              onClick={() => navigate(`/articles/${a._id}`)}
+            >
+              <h3 className="font-semibold text-lg">{a.title}</h3>
+              <p className="text-sm text-gray-500">{a.category}</p>
+              {a.createdBy && (
+                <p className="text-xs text-gray-400 mt-2">By: {a.createdBy.name}</p>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </>
   );

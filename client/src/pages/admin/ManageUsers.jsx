@@ -5,6 +5,8 @@ import AdminNavbar from "../../components/layout/AdminNavbar";
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [deletingId, setDeletingId] = useState(null);
   const [processingId, setProcessingId] = useState(null);
   const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -15,12 +17,19 @@ export default function ManageUsers() {
 
   const fetchUsers = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get("/admin/users");
       setUsers(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  const filteredUsers = users.filter((u) =>
+    `${u.name} ${u.email}`.toLowerCase().includes(search.toLowerCase())
+  );
 
   const deleteUser = async (id) => {
     setDeletingId(id);
@@ -85,10 +94,20 @@ export default function ManageUsers() {
       <div className="p-6">
         <h2 className="text-xl mb-4">Users</h2>
 
-        {users.length === 0 ? (
+        <input
+          type="text"
+          placeholder="Search users by name or email"
+          className="input mb-4"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : filteredUsers.length === 0 ? (
           <div className="card text-gray-500">No users found.</div>
         ) : (
-          users.map((u) => (
+          filteredUsers.map((u) => (
             <div key={u._id} className="card mb-3 flex items-center justify-between gap-3">
               <div>
                 <p className="font-semibold">{u.name}</p>
