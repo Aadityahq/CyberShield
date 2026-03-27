@@ -25,7 +25,7 @@ router.post(
   ],
   createReport
 );
-router.get("/", protect, getReports);
+router.get("/", getReports);
 router.put("/:id", protect, adminOnly, updateReportStatus);
 
 export default router;

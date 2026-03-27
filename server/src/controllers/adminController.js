@@ -80,3 +80,69 @@ export const deleteArticle = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Promote user to admin (Admin or Super Admin)
+export const promoteToAdmin = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role === "SUPER_ADMIN") {
+      return res.status(400).json({ message: "Cannot modify Super Admin role" });
+    }
+
+    user.role = "ADMIN";
+    await user.save();
+
+    res.json({ message: "User promoted to admin" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Suspend user (Admin or Super Admin)
+export const suspendUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role === "SUPER_ADMIN") {
+      return res.status(400).json({ message: "Cannot suspend Super Admin" });
+    }
+
+    user.isSuspended = true;
+    await user.save();
+
+    res.json({ message: "User suspended" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Remove admin role (Super Admin only)
+export const removeAdmin = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role !== "ADMIN") {
+      return res.status(400).json({ message: "Not an admin" });
+    }
+
+    user.role = "USER";
+    await user.save();
+
+    res.json({ message: "Admin removed" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -31,13 +31,9 @@ export const createReport = async (req, res) => {
 // Get Reports (User -> own, Admin -> all)
 export const getReports = async (req, res) => {
   try {
-    let reports;
-
-    if (req.user.role === "ADMIN") {
-      reports = await Report.find().populate("user", "name email");
-    } else {
-      reports = await Report.find({ user: req.user._id });
-    }
+    const reports = await Report.find()
+      .populate("user", "name")
+      .sort({ createdAt: -1 });
 
     res.json(reports);
   } catch (error) {

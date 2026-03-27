@@ -4,11 +4,14 @@ import {
   getAllUsers,
   deleteUser,
   getAllReportsAdmin,
-  deleteArticle
+  deleteArticle,
+  promoteToAdmin,
+  suspendUser,
+  removeAdmin
 } from "../controllers/adminController.js";
 
 import { protect } from "../middlewares/authMiddleware.js";
-import { adminOnly } from "../middlewares/roleMiddleware.js";
+import { adminOnly, superAdminOnly } from "../middlewares/roleMiddleware.js";
 
 const router = express.Router();
 
@@ -18,6 +21,9 @@ router.get("/stats", protect, adminOnly, getDashboardStats);
 // Users
 router.get("/users", protect, adminOnly, getAllUsers);
 router.delete("/users/:id", protect, adminOnly, deleteUser);
+router.put("/promote/:id", protect, adminOnly, promoteToAdmin);
+router.put("/suspend/:id", protect, adminOnly, suspendUser);
+router.put("/demote/:id", protect, superAdminOnly, removeAdmin);
 
 // Reports
 router.get("/reports", protect, adminOnly, getAllReportsAdmin);

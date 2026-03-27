@@ -55,6 +55,10 @@ export const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
+      if (user.isSuspended) {
+        return res.status(403).json({ message: "Account suspended" });
+      }
+
       res.json({
         _id: user._id,
         name: user.name,
