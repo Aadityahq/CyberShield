@@ -61,7 +61,7 @@ export const getReports = async (req, res) => {
 // Update Status (Admin only)
 export const updateReportStatus = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status: newStatus } = req.body;
 
     const report = await Report.findById(req.params.id);
 
@@ -69,8 +69,11 @@ export const updateReportStatus = async (req, res) => {
       return res.status(404).json({ message: "Report not found" });
     }
 
-    report.status = status;
-    report.history.push({ status });
+    report.status = newStatus;
+    report.history.push({
+      status: newStatus,
+      date: new Date()
+    });
     await report.save();
 
     res.json(report);
