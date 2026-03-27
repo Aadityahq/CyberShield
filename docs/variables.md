@@ -20,19 +20,13 @@ POST /api/auth/login
 
 ### Reports
 
-POST /api/reports
-GET /api/reports
+POST /api/reports (protected, multipart/form-data)
+GET /api/reports (public)
 PUT /api/reports/:id
 
 ### AI
 
 POST /api/ai/predict
-
-### Reports
-
-POST /api/reports (with file upload: multipart/form-data)
-GET /api/reports
-PUT /api/reports/:id
 
 ### Articles
 
@@ -47,6 +41,9 @@ PUT /api/articles/:id/status (admin only, update status)
 GET /api/admin/stats
 GET /api/admin/users
 DELETE /api/admin/users/:id
+PUT /api/admin/promote/:id
+PUT /api/admin/suspend/:id
+PUT /api/admin/demote/:id (super admin only)
 GET /api/admin/reports
 DELETE /api/admin/articles/:id
 
@@ -55,6 +52,7 @@ DELETE /api/admin/articles/:id
 ## Frontend Routes
 
 /
+/login
 /register
 /dashboard
 /create-report
@@ -80,6 +78,7 @@ react-hot-toast
 
 USER
 ADMIN
+SUPER_ADMIN
 
 ---
 
@@ -121,6 +120,7 @@ Backend (register/login endpoints):
 - required fields must be present
 - email must match basic email regex
 - password length must be at least 6 (register)
+- suspended users are blocked from login and protected access
 
 ---
 
@@ -150,6 +150,38 @@ sanitizer.js functions:
 
 Usage in forms:
 - Login/Register/CreateReport pages sanitize form data before API.post()
+
+---
+
+## Access Model (Current)
+
+Public frontend pages:
+- /
+- /login
+- /register
+- /reports
+- /ai
+- /articles
+- /articles/:id
+
+Protected frontend pages:
+- /dashboard
+- /create-report
+- /admin/*
+
+Public backend read endpoints:
+- GET /api/reports
+- POST /api/ai/predict
+- GET /api/articles
+- GET /api/articles/:id
+
+Protected backend write/moderation endpoints:
+- POST /api/reports
+- PUT /api/reports/:id
+- POST /api/articles
+- GET /api/articles/admin/pending
+- PUT /api/articles/:id/status
+- /api/admin/*
 
 ---
 
@@ -202,3 +234,18 @@ Admin reviews:
 Public access:
 - Only APPROVED articles returned from GET /api/articles
 - Only APPROVED articles viewable from GET /api/articles/:id
+
+---
+
+## User Governance (Current)
+
+Admin-level actions (ADMIN + SUPER_ADMIN):
+- promote user: PUT /api/admin/promote/:id
+- suspend user: PUT /api/admin/suspend/:id
+- delete user: DELETE /api/admin/users/:id
+
+Super Admin only action:
+- demote admin: PUT /api/admin/demote/:id
+
+CLI helper:
+- npm run make:super-admin -- <email>

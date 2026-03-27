@@ -134,17 +134,17 @@
 - Added admin approval/rejection workflow with side-by-side buttons and creator contact info
 - Industry-level feature set complete: user-generated content + file uploads + admin moderation
 
-## Day 17
-- Installed security packages: helmet, xss-clean, express-validator, express-mongo-sanitize
-- Added global security middleware to app.js: helmet (secure headers), xss-clean (XSS prevention), mongo-sanitize (NoSQL injection prevention)
-- Added express-validator middleware to auth routes for request validation/sanitization (name, email, password)
-- Added validation error handling in auth controller (register/login)
-- Added express-validator middleware to report routes for request validation/sanitization (title, description, category)
-- Added validation error handling in report controller (createReport)
-- Created frontend sanitizer utility (`utils/sanitizer.js`) with cleanInput and sanitizeObject functions
-- Updated auth pages (Login/Register) to use frontend sanitizer before API calls
-- Updated CreateReport page to use frontend sanitizer before API calls
-- Comprehensive AppSec layer complete: backend validation, sanitization, injection prevention, frontend light layer
+## Day 19
+- Added public Home page and moved login route to `/login`
+- Switched `/ai`, `/articles`, `/articles/:id`, and `/reports` to public frontend routes
+- Opened backend read endpoints for AI prediction and report listing while keeping create/update protected
+- Extended user role model to include `SUPER_ADMIN`
+- Added user suspension support (`isSuspended`) in user model
+- Enforced suspended-user blocking in auth middleware and login flow
+- Expanded admin middleware to include `SUPER_ADMIN`; added `superAdminOnly` guard
+- Added admin user governance APIs: promote, suspend, and super-admin demote
+- Updated admin users UI with Make Admin, Suspend, and Remove Admin actions
+- Added super-admin CLI helper script and npm command: `make:super-admin`
 
 ---
 

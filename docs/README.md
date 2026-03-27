@@ -7,10 +7,10 @@ This folder contains project planning, tracking, and implementation notes for Cy
 Implemented backend modules:
 
 - Authentication API (register/login with role + token response)
-- Incident Reporting API (create/get/update status)
-- AI detection integration route
-- Knowledge Hub API (create/get article, get article by id)
-- Admin APIs (stats, users, reports, article deletion)
+- Incident Reporting API (create/get/update status + evidence upload)
+- AI detection integration route (public prediction endpoint)
+- Knowledge Hub API (user submission + approval-based publishing)
+- Admin APIs (stats, users, reports, article deletion, promote/suspend/demote user roles)
 
 Implemented AI module:
 
@@ -21,6 +21,7 @@ Implemented AI module:
 
 Implemented frontend modules:
 
+- Public Home page and public discovery flow
 - Auth pages (Login/Register)
 - User Dashboard (navigation hub)
 - Report pages (Create Report, View Reports)
@@ -30,7 +31,7 @@ Implemented frontend modules:
 - Knowledge Hub pages (Articles list + Article detail + user submission form)
 - User-submitted article submission with approval workflow
 - Admin pages (Dashboard, Manage Reports, Manage Users, Manage Articles)
-- Protected routing with PrivateRoute
+- Hybrid routing model (public content + protected write/admin actions)
 - Shared API service with auth interceptor
 - Reusable Navbar layout component
 - Reusable AdminNavbar layout component
@@ -52,6 +53,8 @@ Implemented frontend modules:
 - Admin moderation interface for pending article review
 - Public API only shows approved articles
 - Admin endpoints for pending article management and status updates
+- Admin user governance controls (Make Admin, Suspend, Remove Admin)
+- Super Admin operational tooling via CLI script
 
 ## Active Services
 
@@ -79,8 +82,8 @@ Auth:
 
 Reports:
 
-- POST /api/reports
-- GET /api/reports
+- POST /api/reports (protected, multipart/form-data)
+- GET /api/reports (public)
 - PUT /api/reports/:id
 
 AI (backend proxy):
@@ -89,28 +92,38 @@ AI (backend proxy):
 
 Knowledge Hub:
 
-- GET /api/articles
-- GET /api/articles/:id
-- POST /api/articles (ADMIN)
+- GET /api/articles (public, approved only)
+- GET /api/articles/:id (public, approved only)
+- POST /api/articles (protected, user submission)
+- GET /api/articles/admin/pending (admin)
+- PUT /api/articles/:id/status (admin)
 
 Admin:
 
 - GET /api/admin/stats
 - GET /api/admin/users
 - DELETE /api/admin/users/:id
+- PUT /api/admin/promote/:id
+- PUT /api/admin/suspend/:id
+- PUT /api/admin/demote/:id (super admin only)
 - GET /api/admin/reports
 - DELETE /api/admin/articles/:id
 
+Tooling:
+
+- npm run make:super-admin -- <email>
+
 ## Frontend Route Summary
 
-- / (Login)
+- / (Public Home)
+- /login
 - /register
 - /dashboard (protected)
 - /create-report (protected)
-- /reports (protected)
-- /ai (protected)
-- /articles (protected)
-- /articles/:id (protected)
+- /reports (public)
+- /ai (public)
+- /articles (public)
+- /articles/:id (public)
 - /admin (protected, admin only)
 - /admin/reports (protected, admin only)
 - /admin/users (protected, admin only)

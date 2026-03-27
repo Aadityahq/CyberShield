@@ -25,6 +25,7 @@ Backend (Auth APIs):
 - Input sanitization and HTML escaping on all auth fields
 - Report title, description, and category validation with sanitization
 - Report severity and contactEmail optional validation
+- Suspended users are blocked from login and protected API access
 
 AI Predictor:
 
@@ -68,3 +69,43 @@ Frontend:
 - Knowledge Hub shows only approved published articles
 - Admin ManageArticles page with Pending vs Published tabs
 - Approve/Reject buttons for pending content with creator contact info
+
+## Public Access Model
+
+Public frontend routes:
+- /
+- /login
+- /register
+- /reports
+- /ai
+- /articles
+- /articles/:id
+
+Protected frontend routes:
+- /dashboard
+- /create-report
+- /admin/*
+
+Public backend endpoints:
+- GET /api/reports
+- POST /api/ai/predict
+- GET /api/articles
+- GET /api/articles/:id
+
+## Role Governance
+
+Roles:
+- USER
+- ADMIN
+- SUPER_ADMIN
+
+Admin actions:
+- Promote user to ADMIN
+- Suspend user account
+- Manage users/reports/articles
+
+Super Admin action:
+- Demote ADMIN to USER
+
+Operational script:
+- npm run make:super-admin -- <email>

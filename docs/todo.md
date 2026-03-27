@@ -15,6 +15,8 @@
 - [x] Login API
 - [x] JWT authentication
 - [x] Protected routes
+- [x] Public route model (home + public read pages)
+- [x] Suspended account enforcement
 
 ---
 
@@ -47,6 +49,9 @@
 - [x] View reports
 - [x] Update report status
 - [x] Manage users
+- [x] Promote user to admin
+- [x] Suspend user account
+- [x] Demote admin (super admin only)
 
 ---
 
@@ -87,4 +92,5 @@
 
 ## 🟢 Low Priority
 - [ ] Forum (optional)
-- [ ] RBAC enhancements (role seeding, granular permissions, audit logging)
+- [x] RBAC baseline enhancements (USER, ADMIN, SUPER_ADMIN)
+- [ ] RBAC advanced enhancements (granular permissions, audit logging)
