@@ -10,6 +10,34 @@ Start here:
 - [Logs](docs/logs.md)
 - [Bugs](docs/bugs.md)
 
+## API Endpoints
+
+Auth:
+- POST /api/auth/register
+- POST /api/auth/login
+
+Reports:
+- GET /api/reports
+- POST /api/reports
+- PUT /api/reports/:id
+
+Articles:
+- GET /api/articles
+- POST /api/articles
+
+Admin:
+- GET /api/admin/stats
+- GET /api/admin/users
+- PUT /api/admin/promote/:id
+
+Notifications:
+- GET /api/notifications
+- PUT /api/notifications/:id/read
+
+Pagination support:
+- GET /api/reports?page=1&limit=10
+- GET /api/admin/reports?page=1&limit=10
+
 ## Validation Rules (Current)
 
 Frontend (Login/Register):
@@ -108,4 +136,4 @@ Super Admin action:
 - Demote ADMIN to USER
 
 Operational script:
-- npm run make:super-admin -- <email>
+- `npm run make:super-admin -- your-email@example.com`
