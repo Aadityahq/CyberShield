@@ -104,6 +104,8 @@ Frontend:
 - Admin ManageArticles page with Pending vs Published tabs
 - Approve/Reject buttons for pending content with creator contact info
 - Identity labels use alias-first display; when alias exists, username is shown on hover
+- Mobile responsiveness improvements applied across core user flows (navbars, profile, reports, forum, articles, AI)
+- Dark mode switch is pending (tracked in docs/todo.md)
 
 ## Public Access Model
 

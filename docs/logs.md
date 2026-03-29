@@ -187,6 +187,12 @@
 - Added username-on-hover behavior when alias is present for clearer identity context
 - Synced docs to include identity display behavior
 
+## Day 25
+
+- Completed second mobile responsiveness pass for primary user flows (Navbar/AdminNavbar, profile, reports, forum, knowledge pages, AI page)
+- Updated TODO tracking with detailed responsive progress and remaining QA note
+- Confirmed dark mode switch is not implemented and explicitly tracked as pending
+
 ---
 
 ## Notes

@@ -185,6 +185,20 @@ User:
 - If `alias` exists, UI shows `alias`
 - When alias is shown, username is exposed on hover (`title` hint)
 
+---
+
+## UI Theme State
+
+- Current theme: light-only
+- Dark mode switch: not implemented yet (tracked in TODO)
+
+---
+
+## Mobile Responsiveness Status
+
+- Core user flows have responsive spacing/wrapping updates (navbar, profile, reports, forum, knowledge pages, AI)
+- Additional QA remains for remaining admin/auth edge cases
+
 Report:
 
 - severity, contactEmail, evidence

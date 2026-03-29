@@ -84,6 +84,9 @@
   - [x] Status-based filtering (PUBLIC vs PENDING vs REJECTED)
   - [x] Admin moderation UI with approve/reject buttons
 - [ ] Mobile responsiveness
+  - [x] Responsive Navbar and AdminNavbar wrapping/stacking
+  - [x] Responsive spacing/buttons for profile, reports, forum, articles, and AI pages
+  - [ ] Final QA pass for auth/admin screens and edge-width devices
 - [x] Add AI Detector frontend page (`/ai`)
 - [x] Add Knowledge Hub list/detail frontend routes (`/articles`, `/articles/:id`)
 - [x] Split admin frontend into pages (ManageReports, ManageUsers, ManageArticles)
@@ -106,8 +109,11 @@
 - [ ] Bonus marks features:
   - [ ] Export reports as PDF
   - [ ] Email notifications (fake/mock service)
-  - [ ] Dark mode (global theme toggle)
+  - [ ] Dark mode switch (global theme toggle + localStorage persistence)
   - [ ] Activity logs (user/admin action trail)
+  - [ ] Profile picture upload
+  - [ ] Recent activity section on profile page
+  - [ ] Badge system (e.g., Top Contributor)
 
 ---
 

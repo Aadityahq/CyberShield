@@ -23,12 +23,14 @@ Implemented modules:
 7. Admin dashboard and role governance
 8. Notification center
 9. Client error logging and admin observability
+10. Mobile responsiveness pass for core user-facing flows
 
 Simplified items:
 
 - Single AI model/classifier (keyword scoring)
 - Monolith backend (no microservice split except AI service)
 - No external queue system for background jobs
+- Light-only UI theme (dark mode switch planned)
 
 ---
 

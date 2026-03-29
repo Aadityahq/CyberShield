@@ -43,6 +43,7 @@ Implemented frontend modules:
 - Shared API service with auth interceptor
 - Reusable Navbar layout component
 - Reusable AdminNavbar layout component
+- Mobile responsiveness pass across primary user flows (navbars, profile, reports, forum, articles, AI)
 - Global UI design system (`.card`, `.btn`, `.btn-primary`, `.btn-danger`, `.input`)
 - Polished status indicators for reports and AI prediction result cards
 - Lucide icons integrated for premium navigation and dashboard hierarchy
@@ -64,6 +65,7 @@ Implemented frontend modules:
 - Super Admin operational tooling via CLI script
 - Global React error fallback pages (`/500`, wildcard 404)
 - Client error reporting button from 500 page
+- Light-only theme currently active (dark mode switch tracked in TODO)
 
 ## Active Services
 
