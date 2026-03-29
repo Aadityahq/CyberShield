@@ -87,6 +87,12 @@
 - [x] Add AI Detector frontend page (`/ai`)
 - [x] Add Knowledge Hub list/detail frontend routes (`/articles`, `/articles/:id`)
 - [x] Split admin frontend into pages (ManageReports, ManageUsers, ManageArticles)
+- [x] Community Forum end-to-end:
+  - [x] Forum backend routes/controller/model
+  - [x] Public forum listing page (`/forum`)
+  - [x] Protected create post route (`/forum/create`)
+  - [x] Auth-gated reply flow
+  - [x] Navbar and dashboard discoverability
 - [ ] Error Logs UX enhancements:
   - [ ] Quick filter presets (Last 24h, Last 7 days)
   - [ ] One-click status filter presets (e.g., Only 5xx)
@@ -99,6 +105,5 @@
 ---
 
 ## 🟢 Low Priority
-- [ ] Forum (optional)
 - [x] RBAC baseline enhancements (USER, ADMIN, SUPER_ADMIN)
 - [ ] RBAC advanced enhancements (granular permissions, audit logging)

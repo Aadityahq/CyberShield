@@ -1,269 +1,184 @@
 # Variables & Constants
 
-## Backend
+## Backend Environment Variables
 
-### Environment Variables
-
-PORT=5000
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=supersecretkey
-AI_SERVICE_URL=http://localhost:8000
-EMAIL_USER=your_gmail_address
-EMAIL_PASS=your_gmail_app_password
-EMAIL_MOCK=false
+- PORT=5000
+- MONGO_URI=your_mongodb_uri
+- JWT_SECRET=supersecretkey
+- AI_SERVICE_URL=http://localhost:8000
+- ENCRYPTION_KEY=your_64_char_hex_key
+- EMAIL_USER=your_gmail_address
+- EMAIL_PASS=your_gmail_app_password
+- EMAIL_MOCK=false
 
 ---
 
-## API Routes
+## Backend API Routes
 
 ### Auth
 
-POST /api/auth/register
-POST /api/auth/login
-POST /api/auth/verify-otp
-POST /api/auth/resend-otp
+- POST /api/auth/register
+- POST /api/auth/login
+- POST /api/auth/verify-otp
+- POST /api/auth/resend-otp
 
 ### Reports
 
-POST /api/reports (protected, multipart/form-data)
-GET /api/reports (public)
-PUT /api/reports/:id
+- POST /api/reports (protected, multipart/form-data)
+- GET /api/reports (public)
+- PUT /api/reports/:id (admin)
 
 ### AI
 
-POST /api/ai/predict
+- POST /api/ai/predict (public)
 
 ### Articles
 
-POST /api/articles (user-submitted, status PENDING)
-GET /api/articles (public, status APPROVED only)
-GET /api/articles/:id (public, status APPROVED only)
-GET /api/articles/admin/pending (admin only, status PENDING)
-PUT /api/articles/:id/status (admin only, update status)
+- POST /api/articles (protected)
+- GET /api/articles (public, approved only)
+- GET /api/articles/:id (public, approved only)
+- GET /api/articles/admin/pending (admin)
+- PUT /api/articles/:id/status (admin)
+
+### Forum
+
+- GET /api/forum (public)
+- POST /api/forum (protected)
+- POST /api/forum/:id/reply (protected)
+
+### Notifications
+
+- GET /api/notifications (admin)
+- PUT /api/notifications/:id/read (admin)
 
 ### Admin
 
-GET /api/admin/stats
-GET /api/admin/users
-DELETE /api/admin/users/:id
-PUT /api/admin/promote/:id
-PUT /api/admin/suspend/:id
-PUT /api/admin/demote/:id (super admin only)
-GET /api/admin/reports
-DELETE /api/admin/articles/:id
+- GET /api/admin/stats
+- GET /api/admin/users
+- DELETE /api/admin/users/:id
+- PUT /api/admin/promote/:id
+- PUT /api/admin/suspend/:id
+- PUT /api/admin/demote/:id (super admin only)
+- GET /api/admin/reports
+- DELETE /api/admin/articles/:id
+
+### System (Error Observability)
+
+- POST /api/system/client-errors
+- GET /api/system/client-errors (admin)
+- GET /api/system/client-errors/export (admin CSV)
 
 ---
 
 ## Frontend Routes
 
-/
-/login
-/register
-/verify
-/dashboard
-/create-report
-/reports
-/ai
-/articles
-/articles/:id
-/admin
-/admin/reports
-/admin/users
-/admin/articles
+Public:
 
----
+- /
+- /login
+- /register
+- /verify
+- /reports
+- /ai
+- /articles
+- /articles/:id
+- /forum
 
-## Frontend UI Libraries
+Protected:
 
-lucide-react
-react-hot-toast
+- /dashboard
+- /create-report
+- /forum/create
+
+Admin Protected:
+
+- /admin
+- /admin/reports
+- /admin/users
+- /admin/articles
+- /admin/notifications
+- /admin/error-logs
+
+Error pages:
+
+- /500
+- * (404)
 
 ---
 
 ## Roles
 
-USER
-ADMIN
-SUPER_ADMIN
+- USER
+- ADMIN
+- SUPER_ADMIN
 
 ---
 
 ## Report Status
 
-PENDING
-REVIEWED
-RESOLVED
+- PENDING
+- REVIEWED
+- RESOLVED
 
 ---
 
 ## AI Output Labels
 
-SAFE
-SUSPICIOUS
-MALICIOUS
+- SAFE
+- SUSPICIOUS
+- MALICIOUS
 
 ---
 
-## AI Predictor Rules (Current)
+## OTP Auth Lifecycle
 
-SCAM_KEYWORDS includes:
-win, lottery, prize, claim, urgent, click, verify, otp, bank, free, offer, link, account, suspended
-
-Classification thresholds:
-- score >= 3 => MALICIOUS (confidence 0.9)
-- score == 2 => SUSPICIOUS (confidence 0.6)
-- score <= 1 => SAFE (confidence 0.8)
+- Register creates 6-digit OTP with 10-minute expiry
+- Unverified duplicate email is overwritten on re-register
+- Verify endpoint blocks after 5 failed attempts
+- Verify error payload includes attempts remaining
+- Resend OTP resets attempt counter and expiry
 
 ---
 
-## Auth Validation Rules (Current)
+## Security Middleware Stack
 
-Frontend (Login/Register):
-- email must match basic email regex
-- password length must be at least 6
+Global middleware (app.js):
 
-Backend (register/login endpoints):
-- required fields must be present
-- email must match basic email regex
-- password length must be at least 6 (register)
-- suspended users are blocked from login and protected access
-- users must verify email by OTP before login
-- max 5 OTP verification attempts before resend is required
-- resend OTP resets OTP expiry window and attempt counter
+- helmet()
+- xssMiddleware() custom sanitizer
+- sanitizeMiddleware() custom NoSQL operator key sanitizer
+- express-rate-limit
+- cors
+- express.json
+- morgan
 
----
+Route-level validation:
 
-## Backend Security Middleware (Current)
-
-Global middleware stack (app.js):
-- helmet(): Secure HTTP headers (disable XSS reflection, content sniffing, etc.)
-- xssMiddleware(): Escape harmful HTML characters in body/query/params
-- sanitizeMiddleware(): Strip dangerous Mongo operator keys (`$` and `.`) from body/query/params
-- cors(): Cross-origin resource sharing
-- express.json(): Parse JSON bodies
-
-Route-level middleware (auth/report endpoints):
-- body().trim().escape(): Remove leading/trailing spaces, escape HTML
-- body().isEmail().normalizeEmail(): Validate email format and normalize
-- body().isLength({ min: 6 }): Enforce minimum length
-- body().isIn([...]): Whitelist valid category values
-- validationResult(): Check for validation errors before processing
+- express-validator (auth, reports, system endpoint)
 
 ---
 
-## Frontend Security Utilities (Current)
+## Model Highlights
 
-sanitizer.js functions:
-- cleanInput(text): Remove HTML tags and script injection attempts
-- sanitizeObject(obj): Clean all string values in an object before API send
+User:
 
-Usage in forms:
-- Login/Register/CreateReport pages sanitize form data before API.post()
+- role, isSuspended
+- isVerified
+- verificationOTP
+- otpExpires (TTL index)
+- failedOtpAttempts
 
----
+Report:
 
-## Access Model (Current)
+- severity, contactEmail, evidence
+- isAnonymous, isSensitive
+- history[] timeline
 
-Public frontend pages:
-- /
-- /login
-- /register
-- /reports
-- /ai
-- /articles
-- /articles/:id
+Article:
 
-Protected frontend pages:
-- /dashboard
-- /create-report
-- /admin/*
+- status: PENDING, APPROVED, REJECTED
 
-Public backend read endpoints:
-- GET /api/reports
-- POST /api/ai/predict
-- GET /api/articles
-- GET /api/articles/:id
+ClientErrorLog:
 
-Protected backend write/moderation endpoints:
-- POST /api/reports
-- PUT /api/reports/:id
-- POST /api/articles
-- GET /api/articles/admin/pending
-- PUT /api/articles/:id/status
-- /api/admin/*
-
----
-
-## Report Model Fields (Current)
-
-- title (string, required)
-- description (string, required)
-- category (enum: PHISHING, SCAM, HARASSMENT, OTHER)
-- severity (enum: LOW, MEDIUM, HIGH, default: LOW)
-- contactEmail (string, optional)
-- evidence (string, optional, file path from upload)
-- status (enum: PENDING, REVIEWED, RESOLVED, default: PENDING)
-- user (ref to User)
-- timestamps (createdAt, updatedAt)
-
----
-
-## Article Model Fields (Current)
-
-- title (string, required)
-- content (string, required)
-- category (enum: PHISHING, SCAM, PRIVACY, GENERAL, default: GENERAL)
-- createdBy (ref to User)
-- status (enum: PENDING, APPROVED, REJECTED, default: PENDING)
-- timestamps (createdAt, updatedAt)
-
----
-
-## File Upload Configuration (Current)
-
-Multer storage settings:
-- destination: /uploads directory (relative to server root)
-- filename: Date.now() + "-" + originalname
-- file types allowed: JPEG, PNG, GIF, PDF
-- static serving: /uploads endpoint serves files from uploads folder
-
----
-
-## Article Workflow Status (Current)
-
-User submits article:
-- Created with status: PENDING
-- Hidden from public API
-
-Admin reviews:
-- API: GET /api/articles/admin/pending (list all pending)
-- API: PUT /api/articles/:id/status { status: "APPROVED" | "REJECTED" }
-- UI: ManageArticles page with Pending & Published tabs
-
-Public access:
-- Only APPROVED articles returned from GET /api/articles
-- Only APPROVED articles viewable from GET /api/articles/:id
-
----
-
-## User Governance (Current)
-
-Admin-level actions (ADMIN + SUPER_ADMIN):
-- promote user: PUT /api/admin/promote/:id
-- suspend user: PUT /api/admin/suspend/:id
-- delete user: DELETE /api/admin/users/:id
-
-Super Admin only action:
-- demote admin: PUT /api/admin/demote/:id
-
-CLI helper:
-- npm run make:super-admin -- <email>
-
----
-
-## User Model Fields (Auth Verification)
-
-- isVerified (boolean, default: false)
-- verificationOTP (string)
-- otpExpires (date, 10-minute TTL index)
-- failedOtpAttempts (number, default: 0)
+- message, stack, source, path, method, statusCode
+- createdAt for filtering/export

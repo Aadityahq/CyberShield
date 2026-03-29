@@ -157,6 +157,21 @@
 - Added optional mock email mode (`EMAIL_MOCK=true`) for local development without SMTP
 - Replaced Express 5-incompatible sanitization middleware with custom safe middlewares
 
+## Day 21
+
+- Added premium public Home page redesign with guided onboarding sections
+- Added clear forum access guidance and CTA pathways from home page
+- Implemented frontend Community Forum module (`/forum`)
+- Implemented standalone protected Create Post page (`/forum/create`)
+- Added auth-gated forum posting and reply flows in UI
+- Added forum discoverability in shared Navbar and User Dashboard cards
+- Added global route wiring for forum pages in AppRoutes
+
+## Day 22
+
+- Fixed broken JSX structure in public Home page (missing closing section tag)
+- Performed full docs-folder synchronization with current implemented state
+
 ---
 
 ## Notes

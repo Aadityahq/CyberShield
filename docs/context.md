@@ -2,77 +2,109 @@
 
 ## Overview
 
-CyberShield is a cybersecurity platform combining:
+CyberShield is a full-stack cybersecurity platform combining:
 
-- Awareness
 - Incident reporting
-- AI-based threat detection
+- AI-based threat triage
+- Moderated knowledge sharing
+- Community collaboration forum
+- Admin governance and monitoring
 
-## Current Scope (MVP)
+## Current Scope
 
-We are NOT building everything.
-We are building a minimal working version with:
+Implemented modules:
 
-### Included Modules
+1. Authentication with OTP email verification
+2. Incident reporting with evidence upload
+3. AI scam detector integration
+4. Knowledge Hub with moderation workflow
+5. Community Forum (public read, auth write)
+6. Admin dashboard and role governance
+7. Notification center
+8. Client error logging and admin observability
 
-1. Authentication
-2. Incident Reporting
-3. AI Scam Detection (text-based)
-4. Knowledge Hub
-5. Admin Dashboard
+Simplified items:
 
-### Excluded / Simplified
-
-- Community Forum (optional)
-- Multiple AI models (only 1 required)
-- Complex microservices (keep simple)
+- Single AI model/classifier (keyword scoring)
+- Monolith backend (no microservice split except AI service)
+- No external queue system for background jobs
 
 ---
 
 ## Architecture
 
-Frontend (React)
-↓
-Backend API (Node.js + Express)
-↓
-MongoDB
+Frontend: React + Vite + Tailwind
 
-AI Service (Python)
-↓
-Called via API from backend
+Backend: Node.js + Express + Mongoose
+
+Database: MongoDB Atlas
+
+AI Service: FastAPI (`/api/predict`) called by backend proxy route
 
 ---
 
 ## User Roles
 
-- User
-- Admin
+- USER
+- ADMIN
+- SUPER_ADMIN
+
+---
+
+## Access Model
+
+Public:
+
+- Home, login/register/verify
+- Reports listing
+- AI detector
+- Knowledge Hub listing/detail
+- Forum listing
+
+Authenticated:
+
+- Create report
+- Create/reply forum posts
+- Article submission
+- Dashboard tools
+
+Admin / Super Admin:
+
+- User management
+- Report moderation
+- Article moderation
+- Notification center
+- Client error log dashboard/export
 
 ---
 
 ## Key Flows
 
-### 1. Report Flow
+1. OTP Auth Flow:
+Register -> OTP email -> Verify OTP -> Login
 
-User → Submit Report → Stored in DB → Admin reviews
+2. Report Flow:
+Create report -> Status lifecycle (`PENDING`/`REVIEWED`/`RESOLVED`) -> Timeline updates
 
-### 2. AI Flow
+3. Forum Flow:
+Public read -> Authenticated create/reply
 
-User input → Backend → Python AI API → Result returned
+4. Error Observability Flow:
+Client captures error -> `/api/system/client-errors` -> Admin views logs and exports CSV
 
 ---
 
 ## Constraints
 
-- Must be simple and working
-- Focus on demo, not perfection
-- Avoid over-engineering
+- Keep implementation demo-friendly but production-minded
+- Prefer clear security baselines over complexity
+- Preserve modular architecture for future upgrades
 
 ---
 
 ## Development Rules
 
-- Keep code modular
-- Always update TODO.md after tasks
-- Log progress in logs.md
-- Track bugs in bugs.md
+- Keep code modular and route-driven
+- Update `docs/todo.md` when priorities change
+- Append major changes in `docs/logs.md`
+- Track regressions and root causes in `docs/bugs.md`
