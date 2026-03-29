@@ -107,6 +107,15 @@ Frontend:
 - Mobile responsiveness improvements applied across core user flows (navbars, profile, reports, forum, articles, AI)
 - Dark mode switch is pending (tracked in docs/todo.md)
 
+## Upcoming Dashboard Architecture (Locked)
+
+- Modular tab-based dashboards
+- Client tabs: Overview, Analytics, Reports
+- Admin tabs: Overview, Analytics, Moderation
+- Real + calculated metrics model
+- Lazy-loaded charts (analytics tab only)
+- Dark mode ready strategy (not globally forced yet)
+
 ## Public Access Model
 
 Public frontend routes:

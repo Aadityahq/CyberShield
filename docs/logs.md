@@ -193,6 +193,14 @@
 - Updated TODO tracking with detailed responsive progress and remaining QA note
 - Confirmed dark mode switch is not implemented and explicitly tracked as pending
 
+## Day 26
+
+- Locked final modular dashboard architecture before implementation
+- Confirmed tab model for client and admin dashboards
+- Confirmed hybrid metrics approach (real API data + frontend-calculated insights)
+- Confirmed lazy chart loading strategy for analytics tab performance
+- Synced docs to capture planned API/data contracts and build sequence
+
 ---
 
 ## Notes

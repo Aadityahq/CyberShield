@@ -67,6 +67,27 @@ Implemented frontend modules:
 - Client error reporting button from 500 page
 - Light-only theme currently active (dark mode switch tracked in TODO)
 
+## Architecture Locked (Next Phase)
+
+Dashboard system has been locked as a modular, scalable design for upcoming implementation:
+
+- Premium tab-based dashboards for both client and admin
+- Hybrid metrics model (real API data + frontend-calculated insights)
+- Dark mode ready strategy (state-ready, not forced globally)
+- Charts loaded on-demand when analytics tab is active (lazy import)
+
+Planned tab structure:
+
+- Client: Overview | Analytics | Reports
+- Admin: Overview | Analytics | Moderation
+
+Planned build order:
+
+1. Refactor reusable analytics dashboard component to dynamic props-driven model
+2. Build ClientDashboard and AdminDashboard containers
+3. Integrate API data sources and calculated metrics
+4. Add async/lazy chart loading in analytics tabs
+
 ## Active Services
 
 Backend (Node + Express):

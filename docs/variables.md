@@ -199,6 +199,55 @@ User:
 - Core user flows have responsive spacing/wrapping updates (navbar, profile, reports, forum, knowledge pages, AI)
 - Additional QA remains for remaining admin/auth edge cases
 
+---
+
+## Dashboard Architecture (Planned)
+
+Reusable component target path:
+
+- `client/src/components/ui/analytics-dashboard.tsx`
+
+Tab mapping:
+
+- Client dashboard tabs: `overview`, `analytics`, `reports`
+- Admin dashboard tabs: `overview`, `analytics`, `moderation`
+
+Metrics replacement strategy:
+
+- Replace generic SaaS placeholders (revenue/sessions/conversion) with CyberShield domain metrics
+- Client overview metrics: reports, articles, forum posts, AI checks
+- Admin overview metrics: users, reports, pending reports, active users
+
+---
+
+## Dashboard Data Contract (Planned)
+
+Client data sources:
+
+- GET `/api/users/profile`
+- GET `/api/reports/user` (planned)
+- GET `/api/articles/user` (planned)
+- GET `/api/forum/user` (planned)
+
+Admin data sources:
+
+- GET `/api/admin/stats`
+- GET `/api/reports`
+- GET `/api/articles/admin/pending`
+
+Calculated metrics pattern:
+
+- Compute status and trend metrics in frontend from fetched collections (for example pending/resolved counts)
+
+Chart loading strategy:
+
+- Lazy-load analytics chart modules only when `activeTab === "analytics"`
+
+State management strategy:
+
+- Local component state with `useState` + `useEffect`
+- Props-driven dashboard component input (`<Dashboard data={dashboardData} />`)
+
 Report:
 
 - severity, contactEmail, evidence

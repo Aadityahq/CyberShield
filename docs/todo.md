@@ -62,6 +62,17 @@
 
 ---
 
+### Phase 8: Modular Dashboard System
+- [x] Lock architecture and update docs first
+- [ ] Refactor reusable analytics dashboard component to dynamic props-driven model
+- [ ] Build tab-based `ClientDashboard` (overview, analytics, reports)
+- [ ] Build tab-based `AdminDashboard` (overview, analytics, moderation)
+- [ ] Hook real API sources and frontend-calculated metrics
+- [ ] Add lazy-loaded charts for analytics tabs only
+- [ ] Add dark mode ready state wiring (without forcing global theme)
+
+---
+
 ## 🟡 Medium Priority
 - [x] UI improvements (basic functional layout)
 - [x] UI polishing pass (design system, cards, status indicators, clean navbars)

@@ -24,6 +24,7 @@ Implemented modules:
 8. Notification center
 9. Client error logging and admin observability
 10. Mobile responsiveness pass for core user-facing flows
+11. Dashboard architecture design lock for next implementation phase
 
 Simplified items:
 
@@ -101,6 +102,9 @@ Default username display -> If alias exists then show alias -> Hover alias to re
 6. Error Observability Flow:
 Client captures error -> `/api/system/client-errors` -> Admin views logs and exports CSV
 
+7. Dashboard Data Flow (Planned):
+Tab-based dashboard -> Fetch real data from APIs -> Compute derived metrics in frontend -> Lazy-load analytics charts only on analytics tab
+
 ---
 
 ## Constraints
@@ -108,6 +112,8 @@ Client captures error -> `/api/system/client-errors` -> Admin views logs and exp
 - Keep implementation demo-friendly but production-minded
 - Prefer clear security baselines over complexity
 - Preserve modular architecture for future upgrades
+- Keep dashboard component modular and prop-driven (no hardcoded stats)
+- Prioritize fast initial load by deferring chart bundles until needed
 
 ---
 
