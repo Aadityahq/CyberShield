@@ -12,6 +12,19 @@ export default function ManageReports() {
   const [hasNextPage, setHasNextPage] = useState(false);
   const limit = 10;
 
+  const renderDisplayName = (person) => {
+    if (!person) return "N/A";
+
+    const baseName = person.name || person.email || "N/A";
+    if (!person.alias) return baseName;
+
+    return (
+      <span title={`Username: ${baseName}`} className="cursor-help">
+        {person.alias}
+      </span>
+    );
+  };
+
   useEffect(() => {
     fetchReports();
   }, [page]);
@@ -81,7 +94,7 @@ export default function ManageReports() {
 
               <div className="flex justify-between items-center mt-2 text-sm">
                 <span className="text-gray-500">
-                  Reporter: {r.isAnonymous ? "Anonymous" : (r.user?.email || r.user?.name || "N/A")}
+                  Reporter: {r.isAnonymous ? "Anonymous" : renderDisplayName(r.user)}
                 </span>
 
                 <span

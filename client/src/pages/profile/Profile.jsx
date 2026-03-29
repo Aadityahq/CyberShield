@@ -106,7 +106,12 @@ export default function Profile() {
 
       <div className="p-6 max-w-4xl mx-auto">
         <div className="card mb-6">
-          <h2 className="text-2xl font-bold mb-1">{user.alias || user.name}</h2>
+          <h2
+            className="text-2xl font-bold mb-1"
+            title={user.alias ? `Username: ${user.name}` : undefined}
+          >
+            {user.alias || user.name}
+          </h2>
           <p className="text-sm text-gray-600">{user.email}</p>
           <p className="text-sm text-gray-500 mt-2">{user.bio || "No bio yet."}</p>
         </div>

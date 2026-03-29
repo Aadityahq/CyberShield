@@ -16,6 +16,19 @@ export default function Forum() {
   const [postForm, setPostForm] = useState({ title: "", content: "" });
   const [replyDrafts, setReplyDrafts] = useState({});
 
+  const renderDisplayName = (person, fallback = "User") => {
+    if (!person) return fallback;
+
+    const baseName = person.name || fallback;
+    if (!person.alias) return baseName;
+
+    return (
+      <span title={`Username: ${baseName}`} className="cursor-help">
+        {person.alias}
+      </span>
+    );
+  };
+
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -152,7 +165,7 @@ export default function Forum() {
               <div key={post._id} className="card">
                 <h3 className="text-lg font-semibold">{post.title}</h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  By {post.user?.name || "Anonymous"} • {new Date(post.createdAt).toLocaleString()}
+                  By {renderDisplayName(post.user, "Anonymous")} • {new Date(post.createdAt).toLocaleString()}
                 </p>
 
                 <p className="mt-3 text-sm leading-relaxed">{post.content}</p>
@@ -168,7 +181,7 @@ export default function Forum() {
                         <div key={reply._id} className="rounded border bg-gray-50 px-3 py-2">
                           <p className="text-sm">{reply.text}</p>
                           <p className="text-xs text-gray-500 mt-1">
-                            {reply.user?.name || "User"} • {new Date(reply.createdAt).toLocaleString()}
+                            {renderDisplayName(reply.user)} • {new Date(reply.createdAt).toLocaleString()}
                           </p>
                         </div>
                       ))}

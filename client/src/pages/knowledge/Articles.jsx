@@ -18,6 +18,19 @@ export default function Articles() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const renderDisplayName = (person, fallback = "Unknown") => {
+    if (!person) return fallback;
+
+    const baseName = person.name || fallback;
+    if (!person.alias) return baseName;
+
+    return (
+      <span title={`Username: ${baseName}`} className="cursor-help">
+        {person.alias}
+      </span>
+    );
+  };
+
   useEffect(() => {
     fetchArticles();
   }, []);
@@ -140,7 +153,7 @@ export default function Articles() {
               <h3 className="font-semibold text-lg">{a.title}</h3>
               <p className="text-sm text-gray-500">{a.category}</p>
               {a.createdBy && (
-                <p className="text-xs text-gray-400 mt-2">By: {a.createdBy.name}</p>
+                <p className="text-xs text-gray-400 mt-2">By: {renderDisplayName(a.createdBy)}</p>
               )}
             </div>
           ))

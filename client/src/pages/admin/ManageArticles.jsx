@@ -10,6 +10,19 @@ export default function ManageArticles() {
   const [activeTab, setActiveTab] = useState("pending");
   const [processing, setProcessing] = useState({});
 
+  const renderDisplayName = (person, fallback = "Unknown") => {
+    if (!person) return fallback;
+
+    const baseName = person.name || fallback;
+    if (!person.alias) return baseName;
+
+    return (
+      <span title={`Username: ${baseName}`} className="cursor-help">
+        {person.alias}
+      </span>
+    );
+  };
+
   useEffect(() => {
     fetchArticles();
   }, []);
@@ -92,7 +105,7 @@ export default function ManageArticles() {
                   <p className="text-sm mb-3">{a.content.substring(0, 150)}...</p>
                   {a.createdBy && (
                     <p className="text-xs text-gray-400 mb-3">
-                      <strong>Submitted by:</strong> {a.createdBy.name} ({a.createdBy.email})
+                      <strong>Submitted by:</strong> {renderDisplayName(a.createdBy)} ({a.createdBy.email})
                     </p>
                   )}
 
