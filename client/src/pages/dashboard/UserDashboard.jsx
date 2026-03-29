@@ -10,12 +10,12 @@ export default function UserDashboard() {
     <>
       <Navbar />
 
-      <div className="p-6">
-        <h2 className="text-2xl mb-4">
+      <div className="p-4 sm:p-6">
+        <h2 className="text-xl sm:text-2xl mb-4">
           Welcome, {user?.name}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           <div className="card flex items-center gap-4 cursor-pointer" onClick={() => navigate("/create-report")}>
             <Shield className="text-indigo-500" />
             <div>

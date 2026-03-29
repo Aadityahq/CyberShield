@@ -104,9 +104,9 @@ export default function Forum() {
     <>
       <Navbar />
 
-      <div className="max-w-5xl mx-auto p-6">
-        <div className="rounded-2xl bg-gradient-to-r from-indigo-700 to-blue-700 text-white p-6 mb-6">
-          <h1 className="text-2xl font-bold mb-2">Community Forum</h1>
+      <div className="max-w-5xl mx-auto p-4 sm:p-6">
+        <div className="rounded-2xl bg-gradient-to-r from-indigo-700 to-blue-700 text-white p-4 sm:p-6 mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold mb-2">Community Forum</h1>
           <p className="text-sm text-indigo-100 mb-3">
             Discuss active cyber threats, ask questions, and help others stay safe.
           </p>
@@ -118,7 +118,7 @@ export default function Forum() {
 
           <div className="mt-4">
             <button
-              className="btn"
+              className="btn w-full sm:w-auto"
               onClick={() => (user ? navigate("/forum/create") : navigate("/login"))}
             >
               {user ? "Create Post" : "Login To Create Post"}
@@ -150,7 +150,7 @@ export default function Forum() {
             disabled={!user || creating}
           />
 
-          <button className="btn btn-primary" onClick={createPost} disabled={!user || creating}>
+          <button className="btn btn-primary w-full sm:w-auto" onClick={createPost} disabled={!user || creating}>
             {creating ? "Publishing..." : "Create Post"}
           </button>
         </div>
@@ -197,7 +197,7 @@ export default function Forum() {
                   />
 
                   <button
-                    className="btn"
+                    className="btn w-full sm:w-auto"
                     onClick={() => replyToPost(post._id)}
                     disabled={!user || replyingId === post._id}
                   >

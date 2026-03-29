@@ -67,9 +67,9 @@ export default function CreateReport() {
     <>
       <Navbar />
 
-      <div className="p-6 max-w-2xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-2xl mx-auto">
         <form className="card" onSubmit={handleSubmit}>
-          <h2 className="text-lg mb-4 font-semibold">Create Report</h2>
+          <h2 className="text-lg sm:text-xl mb-4 font-semibold">Create Report</h2>
 
           <input
             name="title"

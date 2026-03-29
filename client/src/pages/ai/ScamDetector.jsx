@@ -25,9 +25,9 @@ export default function ScamDetector() {
     <>
       <Navbar />
 
-      <div className="p-6 max-w-xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-xl mx-auto">
         <div className="card">
-          <h2 className="text-xl mb-4">AI Scam Detector</h2>
+          <h2 className="text-lg sm:text-xl mb-4">AI Scam Detector</h2>
 
           <textarea
             placeholder="Enter message or URL..."
@@ -38,7 +38,7 @@ export default function ScamDetector() {
 
           <button
             onClick={analyze}
-            className="btn btn-primary"
+            className="btn btn-primary w-full sm:w-auto"
           >
             {loading ? "Processing..." : "Analyze"}
           </button>

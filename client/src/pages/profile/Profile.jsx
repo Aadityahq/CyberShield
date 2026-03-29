@@ -104,10 +104,10 @@ export default function Profile() {
     <>
       <Navbar />
 
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-4xl mx-auto">
         <div className="card mb-6">
           <h2
-            className="text-2xl font-bold mb-1"
+            className="text-xl sm:text-2xl font-bold mb-1 break-words"
             title={user.alias ? `Username: ${user.name}` : undefined}
           >
             {user.alias || user.name}
@@ -133,7 +133,7 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           <form className="card" onSubmit={updateProfile}>
             <h3 className="font-semibold mb-3">Profile Details</h3>
 
@@ -151,7 +151,7 @@ export default function Profile() {
               onChange={(e) => setProfileForm((prev) => ({ ...prev, bio: e.target.value }))}
             />
 
-            <button className="btn btn-primary" type="submit" disabled={savingProfile}>
+            <button className="btn btn-primary w-full sm:w-auto" type="submit" disabled={savingProfile}>
               {savingProfile ? "Saving..." : "Save Profile"}
             </button>
           </form>
@@ -175,7 +175,7 @@ export default function Profile() {
               onChange={(e) => setPasswordForm((prev) => ({ ...prev, newPassword: e.target.value }))}
             />
 
-            <button className="btn btn-primary" type="submit" disabled={savingPassword}>
+            <button className="btn btn-primary w-full sm:w-auto" type="submit" disabled={savingPassword}>
               {savingPassword ? "Updating..." : "Update Password"}
             </button>
           </form>

@@ -20,16 +20,23 @@ export default function ArticleDetail() {
     }
   };
 
-  if (!article) return <p>Loading...</p>;
+  if (!article) {
+    return (
+      <>
+        <Navbar />
+        <div className="p-4 sm:p-6 max-w-2xl mx-auto">Loading...</div>
+      </>
+    );
+  }
 
   return (
     <>
       <Navbar />
 
-      <div className="p-6 max-w-2xl mx-auto">
-        <h2 className="text-2xl mb-3">{article.title}</h2>
+      <div className="p-4 sm:p-6 max-w-2xl mx-auto">
+        <h2 className="text-xl sm:text-2xl mb-3 break-words">{article.title}</h2>
         <p className="text-sm mb-4">{article.category}</p>
-        <p>{article.content}</p>
+        <p className="leading-relaxed break-words">{article.content}</p>
       </div>
     </>
   );

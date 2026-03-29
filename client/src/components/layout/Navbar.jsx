@@ -12,10 +12,10 @@ export default function Navbar() {
   };
 
   return (
-    <div className="bg-white shadow px-6 py-3 flex justify-between items-center">
-      <h1 className="text-xl font-bold text-indigo-600">CyberShield</h1>
+    <div className="bg-white shadow px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+      <h1 className="text-xl font-bold text-indigo-600 text-center sm:text-left">CyberShield</h1>
 
-      <div className="flex items-center gap-4 text-sm">
+      <div className="w-full sm:w-auto flex flex-wrap items-center justify-center sm:justify-end gap-3 text-sm">
         {user && (
           <button onClick={() => navigate("/dashboard")} className="flex items-center gap-1 hover:text-indigo-500">
             <Home size={16} /> Dashboard

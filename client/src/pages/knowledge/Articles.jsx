@@ -76,8 +76,8 @@ export default function Articles() {
     <>
       <Navbar />
 
-      <div className="p-6">
-        <h2 className="text-xl mb-4">Knowledge Hub</h2>
+      <div className="p-4 sm:p-6 max-w-5xl mx-auto">
+        <h2 className="text-lg sm:text-xl mb-4">Knowledge Hub</h2>
 
         <input
           type="text"
@@ -89,7 +89,7 @@ export default function Articles() {
 
         <button
           onClick={() => setShowForm(!showForm)}
-          className="btn btn-primary mb-6"
+          className="btn btn-primary mb-6 w-full sm:w-auto"
         >
           {showForm ? "Cancel" : "Submit Article"}
         </button>

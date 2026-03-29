@@ -33,10 +33,10 @@ export default function AdminNavbar() {
   };
 
   return (
-    <div className="bg-white shadow px-6 py-3 flex justify-between items-center">
-      <h1 className="text-lg font-semibold text-blue-600">Admin Panel</h1>
+    <div className="bg-white shadow px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+      <h1 className="text-lg font-semibold text-blue-600 text-center sm:text-left">Admin Panel</h1>
 
-      <div className="space-x-4 text-sm">
+      <div className="w-full sm:w-auto flex flex-wrap items-center justify-center sm:justify-end gap-3 text-sm">
         <button className="hover:text-blue-500" onClick={() => navigate("/admin")}>Dashboard</button>
         <button className="hover:text-blue-500" onClick={() => navigate("/admin/reports")}>Reports</button>
         <button className="hover:text-blue-500" onClick={() => navigate("/admin/users")}>Users</button>

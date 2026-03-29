@@ -37,9 +37,9 @@ export default function CreatePost() {
     <>
       <Navbar />
 
-      <div className="max-w-3xl mx-auto p-6">
+      <div className="max-w-3xl mx-auto p-4 sm:p-6">
         <form className="card" onSubmit={submit}>
-          <h2 className="text-xl font-semibold mb-4">Create Community Post</h2>
+          <h2 className="text-lg sm:text-xl font-semibold mb-4">Create Community Post</h2>
 
           <input
             className="input mb-3"
@@ -55,11 +55,11 @@ export default function CreatePost() {
             onChange={(e) => setForm((prev) => ({ ...prev, content: e.target.value }))}
           />
 
-          <div className="flex gap-3">
-            <button className="btn btn-primary" type="submit" disabled={loading}>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button className="btn btn-primary w-full sm:w-auto" type="submit" disabled={loading}>
               {loading ? "Publishing..." : "Publish"}
             </button>
-            <button className="btn" type="button" onClick={() => navigate("/forum")}>Back</button>
+            <button className="btn w-full sm:w-auto" type="button" onClick={() => navigate("/forum")}>Back</button>
           </div>
         </form>
       </div>

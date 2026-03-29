@@ -62,8 +62,8 @@ export default function ViewReports() {
     <>
       <Navbar />
 
-      <div className="p-6 max-w-4xl mx-auto">
-        <h2 className="text-xl mb-6 font-semibold">My Reports</h2>
+      <div className="p-4 sm:p-6 max-w-4xl mx-auto">
+        <h2 className="text-lg sm:text-xl mb-6 font-semibold">My Reports</h2>
 
         <input
           type="text"
@@ -83,10 +83,10 @@ export default function ViewReports() {
           <>
             {filteredReports.map((r) => (
               <div key={r._id} className="card mb-4">
-              <div className="flex items-start justify-between mb-3">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                 <h3 className="font-semibold text-lg flex-1">{r.title}</h3>
                 <span
-                  className={`px-3 py-1 rounded-full text-white text-xs whitespace-nowrap ml-3 ${getStatusColor(
+                  className={`px-3 py-1 rounded-full text-white text-xs whitespace-nowrap self-start sm:ml-3 ${getStatusColor(
                     r.status
                   )}`}
                 >
@@ -109,7 +109,7 @@ export default function ViewReports() {
 
               <p className="text-gray-600 mb-4">{r.description}</p>
 
-              <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 text-sm">
                 <div className="flex items-center gap-2">
                   <AlertCircle size={16} className="text-gray-500" />
                   <span>Category: <strong>{r.category}</strong></span>
@@ -137,7 +137,7 @@ export default function ViewReports() {
                     <img
                       src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}${r.evidence}`}
                       alt="Evidence"
-                      className="max-w-md rounded border"
+                      className="w-full max-w-md rounded border"
                     />
                   ) : (
                     <a
@@ -169,7 +169,7 @@ export default function ViewReports() {
               </div>
             ))}
 
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex flex-wrap justify-between items-center gap-2 mt-4">
               <button
                 className="btn"
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
