@@ -116,6 +116,12 @@ Frontend:
 - Lazy-loaded charts (analytics tab only)
 - Dark mode ready strategy (not globally forced yet)
 
+## Upcoming Product Expansion (Planned)
+
+- Retention-first strategy: engagement loops and motivation systems
+- 4 product pillars: Protect, Learn, Community, Engagement
+- Priority roadmap: gamification, short content hub, meme moderation, mini-games, smart insights
+
 ## Public Access Model
 
 Public frontend routes:

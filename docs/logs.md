@@ -209,6 +209,13 @@
 - Added unified dashboard wrapper page (`pages/dashboard/Dashboard.jsx`) and connected it to both `/dashboard` and `/admin` routes
 - Added dark-mode-ready local state preview in dashboard core (non-global)
 
+## Day 28
+
+- Captured product-level retention strategy shift (functional -> habit-forming)
+- Added 4-pillar roadmap to docs: Protect, Learn, Community, Engagement
+- Added prioritized implementation backlog for gamification, short content, memes, mini-games, and insights loops
+- Documented planned data contracts and endpoint outlines for engagement modules
+
 ---
 
 ## Notes

@@ -9,6 +9,7 @@ CyberShield is a full-stack cybersecurity platform combining:
 - Moderated knowledge sharing
 - Community collaboration forum
 - Admin governance and monitoring
+- Engagement-oriented retention mechanics (planned)
 
 ## Current Scope
 
@@ -32,6 +33,11 @@ Simplified items:
 - Monolith backend (no microservice split except AI service)
 - No external queue system for background jobs
 - Light-only UI theme (dark mode switch planned)
+
+Product strategy shift (planned):
+
+- Move from feature-complete utility experience to habit-forming product loop
+- Prioritize retention systems: gamification, short content, and repeat challenge mechanics
 
 ---
 
@@ -105,6 +111,12 @@ Client captures error -> `/api/system/client-errors` -> Admin views logs and exp
 7. Dashboard Data Flow (Planned):
 Tab-based dashboard -> Fetch real data from APIs -> Compute derived metrics in frontend -> Lazy-load analytics charts only on analytics tab
 
+8. Engagement Loop (Planned):
+Daily login/activity -> Earn XP and streak progress -> Unlock badges/challenges -> Return for next milestone
+
+9. Learning Loop (Planned):
+Consume short-form security content -> Practice via mini-games -> Improve awareness score -> Share/community contribution
+
 ---
 
 ## Constraints
@@ -114,6 +126,8 @@ Tab-based dashboard -> Fetch real data from APIs -> Compute derived metrics in f
 - Preserve modular architecture for future upgrades
 - Keep dashboard component modular and prop-driven (no hardcoded stats)
 - Prioritize fast initial load by deferring chart bundles until needed
+- Prefer scalable low-cost content systems (embedded links over heavy media hosting)
+- Keep gamification logic explainable and deterministic in early versions
 
 ---
 

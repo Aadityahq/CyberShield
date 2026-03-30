@@ -75,6 +75,35 @@
 
 ---
 
+### Phase 9: Retention and Engagement Product Expansion
+
+Priority 1 (must-do):
+
+- [ ] Gamification foundation (XP, levels, streak tracking)
+- [ ] Short video content hub (admin-managed embed links)
+- [ ] Meme submission + admin approval flow
+- [ ] Dashboard integration for XP, level progress, and engagement KPIs
+
+Priority 2:
+
+- [ ] Mini phishing detector game
+- [ ] Daily streak reward loop
+- [ ] Badge system (First Report, Cyber Warrior, Top Contributor)
+
+Priority 3:
+
+- [ ] Awareness score system
+- [ ] Weekly challenge system
+- [ ] Activity feed and engagement timeline
+
+Skip for now:
+
+- [ ] Complex multiplayer game modes
+- [ ] Real ML behavioral models
+- [ ] Heavy animation systems
+
+---
+
 ## 🟡 Medium Priority
 - [x] UI improvements (basic functional layout)
 - [x] UI polishing pass (design system, cards, status indicators, clean navbars)

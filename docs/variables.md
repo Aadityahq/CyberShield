@@ -251,6 +251,88 @@ State management strategy:
 - Local component state with `useState` + `useEffect`
 - Props-driven dashboard component input (`<Dashboard data={dashboardData} />`)
 
+---
+
+## Engagement Expansion (Planned)
+
+Core pillars:
+
+- Protect
+- Learn
+- Community
+- Engagement
+
+Gamification XP actions (planned baseline):
+
+- Report submitted: `+20 XP`
+- Article posted: `+30 XP`
+- AI check used: `+5 XP`
+- Daily login: `+2 XP`
+
+Planned badges:
+
+- `First Report`
+- `Cyber Warrior`
+- `Top Contributor`
+
+Planned engagement metrics:
+
+- `xp`
+- `level`
+- `currentStreak`
+- `longestStreak`
+- `awarenessScore`
+
+---
+
+## Planned Content Modules
+
+Short content hub object shape:
+
+- `title`
+- `url` (embed-ready link)
+- `category` (`AWARENESS`, `SCAM`, `TIPS`)
+- `status` (`PENDING`, `APPROVED`, `REJECTED`)
+
+Meme module shape:
+
+- `title`
+- `imageUrl` or `embedUrl`
+- `category` (`SCAM_MEME`, `AWARENESS_MEME`)
+- `status` (`PENDING`, `APPROVED`, `REJECTED`)
+
+Mini-games (planned):
+
+- `Phishing Detector`
+- `URL Checker`
+- `Password Strength Challenge`
+
+---
+
+## Planned API Contracts (Roadmap)
+
+Gamification:
+
+- GET `/api/users/engagement`
+- POST `/api/users/engagement/award`
+
+Short content:
+
+- GET `/api/shorts` (public approved)
+- POST `/api/shorts` (admin create)
+
+Memes:
+
+- GET `/api/memes` (public approved)
+- POST `/api/memes` (auth submit)
+- GET `/api/memes/admin/pending` (admin)
+- PUT `/api/memes/:id/status` (admin)
+
+Challenges and insights:
+
+- GET `/api/challenges/weekly`
+- GET `/api/users/insights`
+
 Report:
 
 - severity, contactEmail, evidence

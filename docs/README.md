@@ -88,6 +88,28 @@ Planned build order:
 3. Integrate API data sources and calculated metrics
 4. Add async/lazy chart loading in analytics tabs
 
+## Product Growth Roadmap (Planned)
+
+Strategic shift:
+
+- From functional utility app -> retention-first product
+- Focus on motivation loops, habit loops, and repeat engagement
+
+Four product pillars:
+
+1. Protect (already established): reports, AI triage, privacy workflows
+2. Learn (expansion planned): structured learning, short-form video hub, gamified learning
+3. Community (expansion planned): forum discussions, meme sharing, engagement loops
+4. Engagement (new pillar): XP/levels, streaks, badges, mini-games, smart insights
+
+High-impact features queued:
+
+- Gamification system (XP, levels, badges, streaks)
+- Short content hub (embedded reels/shorts links managed by admin)
+- Meme submission and moderation flow
+- Mini security games (phishing detector, URL checker, password strength)
+- Smart insights and challenge loops (awareness score, weekly goals)
+
 ## Active Services
 
 Backend (Node + Express):
