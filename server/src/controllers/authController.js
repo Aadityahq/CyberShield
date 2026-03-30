@@ -208,6 +208,7 @@ export const loginUser = async (req, res) => {
         level: refreshedUser.level,
         streak: refreshedUser.streak,
         coins: refreshedUser.coins,
+        dailyCoins: refreshedUser.dailyCoins,
         badges: refreshedUser.badges,
         token: generateToken(refreshedUser._id)
       });

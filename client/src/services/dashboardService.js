@@ -44,6 +44,7 @@ export const transformUserDashboard = ({ profile, reports, articles, forumPosts,
       level: profile?.user?.level ?? 1,
       streak: profile?.user?.streak ?? 0,
       coins: profile?.user?.coins ?? 0,
+      dailyCoins: profile?.user?.dailyCoins ?? 0,
       badges: profile?.user?.badges ?? []
     },
     reportStatus: {

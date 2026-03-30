@@ -33,6 +33,7 @@ export const getProfile = async (req, res) => {
         email: user.email,
         bio: user.bio,
         coins: user.coins,
+        dailyCoins: user.dailyCoins,
         xp: user.xp,
         level: user.level,
         streak: user.streak,

@@ -60,6 +60,32 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
+    coins: {
+      type: Number,
+      default: 50
+    },
+    dailyCoins: {
+      type: Number,
+      default: 0
+    },
+    lastCoinReset: {
+      type: Date,
+      default: Date.now
+    },
+    lastActions: {
+      game: {
+        type: Date,
+        default: null
+      },
+      vote: {
+        type: Date,
+        default: null
+      },
+      meme: {
+        type: Date,
+        default: null
+      }
+    },
     lastActive: {
       type: Date,
       default: null

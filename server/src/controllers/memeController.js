@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator";
 import Meme from "../models/Meme.js";
 import { addXP } from "../utils/gamification.js";
-import { addCoins, spendCoins } from "../utils/economy.js";
+import { addCoins, enforceActionCooldown, spendCoins } from "../utils/economy.js";
 import { sendError, sendSuccess } from "../utils/response.js";
 
 const FLAG_MIN_TOTAL_VOTES = 20;
@@ -32,7 +32,7 @@ export const createMeme = async (req, res) => {
     });
 
     await addXP(req.user._id, "MEME_CREATED");
-  await addCoins(req.user._id, "MEME_CREATED");
+    await addCoins(req.user._id, "MEME_CREATED");
 
     return sendSuccess(res, meme, 201, "Meme uploaded");
   } catch (error) {
@@ -91,6 +91,12 @@ export const voteMeme = async (req, res) => {
     const voteUnchanged = (type === "up" && wasUpvoted) || (type === "down" && wasDownvoted);
     if (voteUnchanged) {
       return sendSuccess(res, meme, 200, "Vote unchanged");
+    }
+
+    try {
+      await enforceActionCooldown(req.user._id, "VOTE");
+    } catch (economyError) {
+      return sendError(res, 400, economyError.message);
     }
 
     if (type === "down") {
