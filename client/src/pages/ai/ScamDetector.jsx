@@ -13,6 +13,10 @@ export default function ScamDetector() {
     try {
       const { data } = await API.post("/ai/predict", { text });
       setResult(data);
+
+      const previousCount = Number(localStorage.getItem("aiChecksCount") || 0);
+      localStorage.setItem("aiChecksCount", String(previousCount + 1));
+
       toast.success("Analysis complete");
     } catch (error) {
       toast.error("AI request failed");

@@ -37,6 +37,13 @@ export default function DashboardCore({ type, data }) {
   }, [activeTab]);
 
   const stats = data?.stats || {};
+  const gamification = data?.gamification || {
+    xp: 0,
+    level: 1,
+    streak: 0,
+    badges: []
+  };
+  const progressPercent = Math.min(100, Number(gamification.xp || 0) % 100);
 
   return (
     <div
@@ -91,6 +98,44 @@ export default function DashboardCore({ type, data }) {
                 <h2 className="text-xl sm:text-2xl font-bold">{value}</h2>
               </div>
             ))}
+
+            {type === "user" && (
+              <>
+                <div className="card col-span-2">
+                  <h3 className="font-semibold mb-2">Your Progress</h3>
+
+                  <p>Level {gamification.level}</p>
+                  <p>XP: {gamification.xp}</p>
+                  <p>🔥 Streak: {gamification.streak} day{gamification.streak === 1 ? "" : "s"}</p>
+
+                  <div className="w-full bg-gray-200 h-2 rounded mt-2">
+                    <div
+                      className="bg-indigo-500 h-2 rounded"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="card col-span-2">
+                  <h3 className="font-semibold mb-2">Badges</h3>
+
+                  {Array.isArray(gamification.badges) && gamification.badges.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {gamification.badges.map((badge, index) => (
+                        <span
+                          key={`${badge.name}-${index}`}
+                          className="px-3 py-1 bg-yellow-400 rounded text-sm"
+                        >
+                          {badge.name}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">No badges earned yet.</p>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         )}
 

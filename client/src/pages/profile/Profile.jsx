@@ -99,6 +99,11 @@ export default function Profile() {
   }
 
   const { user, stats } = data;
+  const xp = Number(user.xp || 0);
+  const level = Number(user.level || 1);
+  const streak = Number(user.streak || 0);
+  const progressPercent = Math.min(100, xp % 100);
+  const badges = Array.isArray(user.badges) ? user.badges : [];
 
   return (
     <>
@@ -114,6 +119,38 @@ export default function Profile() {
           </h2>
           <p className="text-sm text-gray-600">{user.email}</p>
           <p className="text-sm text-gray-500 mt-2">{user.bio || "No bio yet."}</p>
+          <p className="text-sm text-gray-600 mt-2">🔥 Streak: {streak} day{streak === 1 ? "" : "s"}</p>
+        </div>
+
+        <div className="card mb-6">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <h3 className="font-semibold">Level {level}</h3>
+            <p className="text-sm text-gray-600">XP: {xp}</p>
+          </div>
+
+          <div className="w-full bg-gray-200 h-2 rounded">
+            <div
+              className="bg-indigo-500 h-2 rounded"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+
+          <p className="text-xs text-gray-500 mt-2">{100 - progressPercent}% to next level</p>
+        </div>
+
+        <div className="card mb-6">
+          <h3 className="font-semibold mb-2">Badges</h3>
+          {badges.length === 0 ? (
+            <p className="text-sm text-gray-500">No badges earned yet.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {badges.map((badge, index) => (
+                <span key={`${badge.name}-${index}`} className="px-3 py-1 bg-yellow-400 rounded text-sm">
+                  {badge.name}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
