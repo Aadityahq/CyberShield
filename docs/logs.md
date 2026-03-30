@@ -312,6 +312,17 @@
 - Added daily coin progress and cap-reached warnings to Navbar and Dashboard progress card
 - Added dashboard wallet snapshot with remaining daily budget and UTC reset countdown hint
 
+## Day 36
+
+- Implemented gamified Phishing Detector module as reusable game feature
+- Added static question dataset (`client/src/data/phishingQuestions.js`) for deterministic learning flow
+- Added reusable game UI component (`client/src/components/games/PhishingQuestionCard.jsx`)
+- Added protected game page (`/games`) with progress, score, instant explanation feedback, and reward trigger
+- Added backend game reward API (`POST /api/game/reward`) with auth guard
+- Added anti-abuse cooldown on game rewards using `lastPlayedGame` field (10s minimum interval)
+- Wired reward outcomes to XP (`GAME_CORRECT`) and coin (`GAME_CORRECT`) systems
+- Added Learn-menu navigation entry to launch the Phishing Detector game
+
 ---
 
 ## Notes

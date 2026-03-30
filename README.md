@@ -46,6 +46,9 @@ Memes:
 - GET /api/memes/admin/flagged
 - PUT /api/memes/:id
 
+Games:
+- POST /api/game/reward
+
 Admin:
 - GET /api/admin/stats
 - GET /api/admin/users
@@ -128,6 +131,7 @@ Frontend:
 - Meme Hub page shows visible memes with community voting
 - Upload Meme page allows authenticated users to submit image-based memes
 - Admin Meme Moderation page manages flagged memes (approve/remove/toggle voting)
+- Phishing Detector game page adds interactive SAFE/SCAM quiz flow with feedback, score, and rewards
 - Identity labels use alias-first display; when alias exists, username is shown on hover
 - Mobile responsiveness improvements applied across core user flows (navbars, profile, reports, forum, articles, AI)
 - Dark mode switch is pending (tracked in docs/todo.md)
@@ -139,6 +143,7 @@ Backend:
 
 - Gamification model and reward engine implemented (XP, levels, streaks, badges)
 - Event-based XP rewards wired to report/article/forum/AI/login actions
+- Game reward endpoint wired to XP + coin rewards with cooldown protection
 - Meme engagement loop rewards added (meme upload, meme liked, meme voted)
 - Meme voting anti-abuse checks added (self-vote blocked, duplicate same-vote no XP, rate limiter)
 - Virtual coin economy added (earn + spend rules with anti-spam action costs)
@@ -182,6 +187,7 @@ Protected frontend routes:
 - /forum/create
 - /videos/submit
 - /memes/upload
+- /games
 - /admin/*
 
 Public backend endpoints:

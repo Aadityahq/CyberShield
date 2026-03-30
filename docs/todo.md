@@ -126,13 +126,13 @@ Skip for now:
 
 **B. Fun & Learn (Mini Games)** (interactive quiz-based learning)
 
-- [ ] Game 1: Phishing Detector (identify phishing messages)
+- [x] Game 1: Phishing Detector (identify phishing messages)
 - [ ] Game 2: URL Checker (identify malicious URLs)
 - [ ] Game 3: Password Strength Challenge (rate password strength)
-- [ ] Games scoring and explanations
-- [ ] XP rewards for correct answers
-- [ ] Frontend Games hub page
-- [ ] Game components and quiz logic
+- [x] Games scoring and explanations
+- [x] XP rewards for correct answers
+- [x] Frontend Games hub/page (`/games`)
+- [x] Game components and quiz logic
 
 **C. Gamification Integration**
 

@@ -16,6 +16,7 @@ Implemented backend modules:
 - Community Forum API (public read, authenticated post/reply)
 - Video Hub API (submit, public approved feed, admin moderation)
 - Meme Hub API (upload, feed, voting, auto-flagging, admin moderation)
+- Game API (phishing reward endpoint with auth + anti-abuse cooldown)
 - Admin APIs (stats, users, reports, article deletion, promote/suspend/demote user roles)
 - Notification API (list + mark read)
 - System observability API (client error logs, filter, CSV export)
@@ -47,6 +48,7 @@ Implemented frontend modules:
 - Community Forum pages (`/forum`, `/forum/create`)
 - Video Hub pages (`/videos`, `/videos/submit`)
 - Meme Hub pages (`/memes`, `/memes/upload`)
+- Phishing Detector game page (`/games`) with reusable question card module
 - Admin pages (Dashboard, Manage Reports, Manage Users, Manage Articles)
 - Admin page (Video Moderation)
 - Admin page (Meme Moderation)
@@ -120,7 +122,7 @@ Gamified learning module designed to increase engagement and cybersecurity aware
 	- Vote throttling guard (rate limiter)
 - 	- Engagement loop rewards (meme create, meme liked, meme voted participation)
 - 	- Anti-abuse checks (self-vote blocked, duplicate same-vote no XP)
-- **Mini Games (Planned):** Phishing Detector, URL Checker, Password Strength
+- **Mini Games:** Phishing Detector (implemented), URL Checker (planned), Password Strength (planned)
 - **Gamification Integration:** Meme upload, meme like, and meme voting XP actions added; meme-focused badges added
 - **Economy Integration (Implemented):** Coin rewards (daily login/report/meme/likes) and action costs (meme upload/downvote/forum post/comment)
 - **Economy Visibility (Implemented):** Dashboard now surfaces daily cap progress, remaining earn budget, and UTC reset countdown
@@ -220,6 +222,10 @@ Memes:
 - GET /api/memes/admin/flagged (admin)
 - PUT /api/memes/:id (admin moderation)
 
+Games:
+
+- POST /api/game/reward (protected, correct-answer reward)
+
 Admin:
 
 - GET /api/admin/stats
@@ -266,6 +272,7 @@ Tooling:
 - /videos/submit (protected)
 - /memes (public)
 - /memes/upload (protected)
+- /games (protected)
 - /admin (protected, admin only)
 - /admin/reports (protected, admin only)
 - /admin/users (protected, admin only)

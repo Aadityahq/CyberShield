@@ -68,10 +68,9 @@
 - GET /api/memes/admin/flagged (admin)
 - PUT /api/memes/:id (admin)
 
-### Games (Planned)
+### Games
 
-- GET /api/games (public list)
-- POST /api/games/:gameId/submit (protected, answer submission)
+- POST /api/game/reward (protected, reward correct phishing answer)
 
 ### Notifications
 
@@ -112,7 +111,6 @@ Public:
 - /forum
 - /videos
 - /memes
-- /games
 
 Protected:
 
@@ -213,6 +211,7 @@ User:
 - dailyCoins
 - lastCoinReset
 - lastActions (`game`, `vote`, `meme` timestamps)
+- lastPlayedGame
 - lastActive
 - badges[] (`name`, `earnedAt`)
 
@@ -327,6 +326,7 @@ Gamification XP actions (implemented):
 - Meme uploaded: `+10 XP`
 - Meme upvoted (creator reward): `+2 XP`
 - Meme voting participation: `+1 XP`
+- Phishing game correct answer: `+5 XP`
 
 Coin economy actions (implemented):
 
@@ -334,6 +334,7 @@ Coin economy actions (implemented):
 - Report submitted: `+10 coins`
 - Meme uploaded: `+5 coins`
 - Meme like received: `+2 coins`
+- Phishing game correct answer: `+3 coins`
 
 Coin costs (implemented):
 
