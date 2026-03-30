@@ -322,6 +322,7 @@
 - Added anti-abuse cooldown on game rewards using `lastPlayedGame` field (10s minimum interval)
 - Wired reward outcomes to XP (`GAME_CORRECT`) and coin (`GAME_CORRECT`) systems
 - Added Learn-menu navigation entry to launch the Phishing Detector game
+- Added contextual create-button shortcuts in Reports, Video Hub, and Meme Hub pages to reduce navigation friction
 
 ---
 

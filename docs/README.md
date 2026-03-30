@@ -49,6 +49,7 @@ Implemented frontend modules:
 - Video Hub pages (`/videos`, `/videos/submit`)
 - Meme Hub pages (`/memes`, `/memes/upload`)
 - Phishing Detector game page (`/games`) with reusable question card module
+- Contextual quick-create CTAs on Reports, Video Hub, and Meme Hub pages
 - Admin pages (Dashboard, Manage Reports, Manage Users, Manage Articles)
 - Admin page (Video Moderation)
 - Admin page (Meme Moderation)

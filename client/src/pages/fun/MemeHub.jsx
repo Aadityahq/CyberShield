@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Navbar from "../../components/layout/Navbar";
 import MemeCard from "../../components/meme/MemeCard";
 import API from "../../services/api";
 
 export default function MemeHub() {
+  const navigate = useNavigate();
   const [memes, setMemes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("latest");
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   const fetchMemes = async () => {
     try {
@@ -35,10 +38,19 @@ export default function MemeHub() {
             <p className="text-sm text-gray-500">Community memes with voting and moderation safeguards.</p>
           </div>
 
-          <select className="input w-full sm:w-44" value={sort} onChange={(e) => setSort(e.target.value)}>
-            <option value="latest">Latest</option>
-            <option value="trending">Trending</option>
-          </select>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <select className="input w-full sm:w-44" value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value="latest">Latest</option>
+              <option value="trending">Trending</option>
+            </select>
+            <button
+              type="button"
+              className="btn btn-primary w-full sm:w-auto"
+              onClick={() => navigate(user ? "/memes/upload" : "/login")}
+            >
+              {user ? "Upload Meme" : "Login to Upload"}
+            </button>
+          </div>
         </div>
 
         {loading ? (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Navbar from "../../components/layout/Navbar";
 import API from "../../services/api";
@@ -23,8 +24,10 @@ const toEmbedUrl = (url) => {
 };
 
 export default function VideoHub() {
+  const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
     fetchVideos();
@@ -51,6 +54,13 @@ export default function VideoHub() {
             <h2 className="text-xl sm:text-2xl font-semibold">Video Hub</h2>
             <p className="text-sm text-gray-500">Short-form awareness content approved by moderators</p>
           </div>
+          <button
+            type="button"
+            className="btn btn-primary w-full sm:w-auto"
+            onClick={() => navigate(user ? "/videos/submit" : "/login")}
+          >
+            {user ? "Submit Video" : "Login to Submit"}
+          </button>
         </div>
 
         {loading ? (

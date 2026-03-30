@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
 import Navbar from "../../components/layout/Navbar";
 import { AlertCircle, Shield, Mail, Image as ImageIcon, EyeOff, TriangleAlert } from "lucide-react";
 
 export default function ViewReports() {
+  const navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user") || "null");
   const limit = 10;
 
   useEffect(() => {
@@ -63,7 +66,16 @@ export default function ViewReports() {
       <Navbar />
 
       <div className="p-4 sm:p-6 max-w-4xl mx-auto">
-        <h2 className="text-lg sm:text-xl mb-6 font-semibold">My Reports</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold">My Reports</h2>
+          <button
+            type="button"
+            className="btn btn-primary w-full sm:w-auto"
+            onClick={() => navigate(user ? "/create-report" : "/login")}
+          >
+            {user ? "Create Report" : "Login to Create Report"}
+          </button>
+        </div>
 
         <input
           type="text"

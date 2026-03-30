@@ -143,6 +143,7 @@ Skip for now:
 **D. UI/UX Integration**
 
 - [x] Update Navbar "Learn" section with Memes and Games links
+- [x] Add in-page quick-create CTAs for Reports, Video Hub, and Meme Hub
 - [x] Responsive meme card components
 - [x] Meme card micro-feedback (+XP hint and trending badge)
 - [ ] Game UI and feedback systems
