@@ -8,10 +8,11 @@ const isCurrentUserRecord = (recordUser, currentUserId) => {
   return String(id) === String(currentUserId);
 };
 
-export const transformUserDashboard = ({ profile, reports, articles, forumPosts, currentUserId }) => {
+export const transformUserDashboard = ({ profile, reports, articles, forumPosts, memes, currentUserId }) => {
   const ownReports = reports.filter((r) => isCurrentUserRecord(r.user, currentUserId));
   const ownArticles = articles.filter((a) => isCurrentUserRecord(a.createdBy, currentUserId));
   const ownPosts = forumPosts.filter((p) => isCurrentUserRecord(p.user, currentUserId));
+  const ownMemes = memes.filter((m) => isCurrentUserRecord(m.createdBy, currentUserId));
 
   const pending = ownReports.filter((r) => r.status === "PENDING").length;
   const reviewed = ownReports.filter((r) => r.status === "REVIEWED").length;
@@ -22,6 +23,10 @@ export const transformUserDashboard = ({ profile, reports, articles, forumPosts,
   const reportsThisWeek = ownReports.filter((r) => new Date(r.createdAt) >= weekAgo).length;
 
   const aiChecks = Number(localStorage.getItem("aiChecksCount") || 0);
+  const topMemeLikes = ownMemes.reduce((max, meme) => {
+    const likes = Number(meme.upvotes?.length || 0);
+    return likes > max ? likes : max;
+  }, 0);
 
   return {
     stats: {
@@ -29,6 +34,7 @@ export const transformUserDashboard = ({ profile, reports, articles, forumPosts,
       articles: profile?.stats?.articles ?? ownArticles.length,
       posts: profile?.stats?.posts ?? ownPosts.length,
       aiChecks,
+      topMemeLikes,
       xp: profile?.user?.xp ?? 0,
       level: profile?.user?.level ?? 1
     },
@@ -89,11 +95,12 @@ export const transformAdminDashboard = ({ stats, reports, pendingArticles }) => 
 };
 
 export const getUserDashboardData = async (currentUserId) => {
-  const [profileRes, reportsRes, articlesRes, forumRes] = await Promise.all([
+  const [profileRes, reportsRes, articlesRes, forumRes, memesRes] = await Promise.all([
     API.get("/users/profile"),
     API.get(`/reports?page=1&limit=${DEFAULT_LIMIT}`),
     API.get("/articles"),
-    API.get("/forum")
+    API.get("/forum"),
+    API.get("/memes")
   ]);
 
   return transformUserDashboard({
@@ -101,6 +108,7 @@ export const getUserDashboardData = async (currentUserId) => {
     reports: reportsRes.data || [],
     articles: articlesRes.data || [],
     forumPosts: forumRes.data || [],
+    memes: memesRes.data || [],
     currentUserId
   });
 };

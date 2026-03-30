@@ -20,3 +20,14 @@ const fileFilter = (req, file, cb) => {
 };
 
 export const upload = multer({ storage, fileFilter });
+
+const imageOnlyFilter = (req, file, cb) => {
+  const allowedMimes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+  if (allowedMimes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type. Only image files are allowed."));
+  }
+};
+
+export const uploadImageOnly = multer({ storage, fileFilter: imageOnlyFilter });
