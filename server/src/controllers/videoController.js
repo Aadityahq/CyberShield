@@ -1,0 +1,71 @@
+import { validationResult } from "express-validator";
+import Video from "../models/Video.js";
+import { sendError, sendSuccess } from "../utils/response.js";
+
+export const createVideo = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return sendError(res, 400, "Validation failed", errors.array());
+    }
+
+    const { title, url, category } = req.body;
+
+    const video = await Video.create({
+      title,
+      url,
+      category,
+      createdBy: req.user._id
+    });
+
+    return sendSuccess(res, video, 201, "Video submitted for review");
+  } catch (error) {
+    return sendError(res, 500, error.message);
+  }
+};
+
+export const getVideos = async (req, res) => {
+  try {
+    const videos = await Video.find({ status: "APPROVED" })
+      .sort({ createdAt: -1 });
+
+    return sendSuccess(res, videos);
+  } catch (error) {
+    return sendError(res, 500, error.message);
+  }
+};
+
+export const getPendingVideos = async (req, res) => {
+  try {
+    const videos = await Video.find({ status: "PENDING" })
+      .populate("createdBy", "name alias email")
+      .sort({ createdAt: -1 });
+
+    return sendSuccess(res, videos);
+  } catch (error) {
+    return sendError(res, 500, error.message);
+  }
+};
+
+export const updateVideoStatus = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return sendError(res, 400, "Validation failed", errors.array());
+    }
+
+    const { status } = req.body;
+    const video = await Video.findById(req.params.id);
+
+    if (!video) {
+      return sendError(res, 404, "Video not found");
+    }
+
+    video.status = status;
+    await video.save();
+
+    return sendSuccess(res, video, 200, `Video ${status.toLowerCase()}`);
+  } catch (error) {
+    return sendError(res, 500, error.message);
+  }
+};

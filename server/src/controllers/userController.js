@@ -123,3 +123,26 @@ export const changePassword = async (req, res) => {
     return sendError(res, 500, error.message);
   }
 };
+
+export const deleteOwnAccount = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return sendError(res, 404, "User not found");
+    }
+
+    await Promise.all([
+      Report.deleteMany({ user: userId }),
+      Article.deleteMany({ createdBy: userId }),
+      ForumPost.deleteMany({ user: userId }),
+      ForumPost.updateMany({}, { $pull: { replies: { user: userId } } }),
+      User.findByIdAndDelete(userId)
+    ]);
+
+    return sendSuccess(res, { deleted: true }, 200, "Account deleted");
+  } catch (error) {
+    return sendError(res, 500, error.message);
+  }
+};

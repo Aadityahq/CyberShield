@@ -1,7 +1,12 @@
 import express from "express";
 import { body } from "express-validator";
 import { protect } from "../middlewares/authMiddleware.js";
-import { changePassword, getProfile, updateProfile } from "../controllers/userController.js";
+import {
+  changePassword,
+  deleteOwnAccount,
+  getProfile,
+  updateProfile
+} from "../controllers/userController.js";
 
 const router = express.Router();
 
@@ -36,5 +41,7 @@ router.put(
   ],
   changePassword
 );
+
+router.delete("/me", protect, deleteOwnAccount);
 
 export default router;
