@@ -45,6 +45,8 @@ export const registerUser = async (req, res) => {
       `Your OTP is: ${otp}. It expires in 10 minutes.`
     );
 
+    console.log(`[AUTH] OTP email dispatched to ${email}`);
+
     return sendSuccess(res, {
       _id: user._id,
       name: user.name,
@@ -53,6 +55,7 @@ export const registerUser = async (req, res) => {
       isVerified: user.isVerified
     }, 201);
   } catch (error) {
+    console.error("[AUTH] registerUser error:", error?.message || error);
     return sendError(res, 500, error.message);
   }
 };
@@ -84,8 +87,11 @@ export const resendOTP = async (req, res) => {
 
     await sendEmail(email, "Resend OTP", `Your OTP is: ${otp}. It expires in 10 minutes.`);
 
+    console.log(`[AUTH] OTP resent to ${email}`);
+
     return sendSuccess(res, { resent: true }, 200, "OTP resent");
   } catch (error) {
+    console.error("[AUTH] resendOTP error:", error?.message || error);
     return sendError(res, 500, error.message);
   }
 };

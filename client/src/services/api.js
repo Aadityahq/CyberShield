@@ -1,8 +1,12 @@
 import axios from "axios";
 import { saveErrorContext } from "../utils/errorReporter";
 
+const apiBase = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : "http://localhost:5000/api";
+
 const API = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL: apiBase
 });
 
 // Attach token automatically
