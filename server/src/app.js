@@ -26,24 +26,45 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
+const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || "";
+const allowedOrigins = allowedOriginsEnv
+	.split(",")
+	.map((origin) => origin.trim())
+	.filter(Boolean);
+
 const corsOptions = {
 	origin: (origin, callback) => {
 		if (!origin) {
 			return callback(null, true);
 		}
 
-		try {
-			const parsed = new URL(origin);
-			const isLocalDevOrigin = parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1";
+		let hostname;
 
-			if (isLocalDevOrigin) {
-				return callback(null, true);
-			}
+		try {
+			hostname = new URL(origin).hostname;
 		} catch {
-			return callback(new Error("Invalid origin"));
+			// Malformed Origin header: deny without throwing to avoid 500 errors
+			return callback(null, false);
 		}
 
-		return callback(new Error("Not allowed by CORS"));
+		const isLocalDevOrigin = hostname === "localhost" || hostname === "127.0.0.1";
+
+		const isAllowedByEnv = allowedOrigins.some((allowedOrigin) => {
+			try {
+				const allowedHostname = new URL(allowedOrigin).hostname;
+				return allowedHostname === hostname;
+			} catch {
+				// If allowedOrigin is not a full URL, fall back to direct comparison
+				return allowedOrigin === origin || allowedOrigin === hostname;
+			}
+		});
+
+		if (isLocalDevOrigin || isAllowedByEnv) {
+			return callback(null, true);
+		}
+
+		// Disallowed origin: cleanly deny without throwing
+		return callback(null, false);
 	},
 	methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization"],
