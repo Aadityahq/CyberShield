@@ -57,7 +57,7 @@ python -m venv .venv
 
 5. Install AI service packages
 ```powershell
-pip install fastapi uvicorn pydantic
+pip install -r requirements.txt
 ```
 
 ## 4) Server environment configuration
@@ -68,6 +68,9 @@ Create or update the server env file at server/.env with these keys:
 - MONGO_URI=<your_mongodb_connection_string>
 - JWT_SECRET=<your_secret>
 - AI_SERVICE_URL=http://localhost:8000
+- ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
+- DEBUG_REQUEST_LOGS=false
+- ENCRYPTION_KEY=<your_64_char_hex_key>
 - EMAIL_MOCK=true
 
 Copy-paste template:
@@ -77,6 +80,9 @@ PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret
 AI_SERVICE_URL=http://localhost:8000
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
+DEBUG_REQUEST_LOGS=false
+ENCRYPTION_KEY=your_64_char_hex_key
 EMAIL_MOCK=true
 ```
 
@@ -85,9 +91,23 @@ Email notes:
 - Use EMAIL_MOCK=true for local development to avoid SMTP setup.
 - If you want real OTP emails, configure EMAIL_USER and EMAIL_PASS too.
 
+Optional email config for real inbox delivery:
+
+```env
+EMAIL_USER=your_gmail_address
+EMAIL_PASS=your_gmail_app_password
+```
+
 ## 5) Start the full stack
 
 Open 3 terminals and run:
+
+If you want a single launcher instead, use the root scripts:
+
+- Windows PowerShell: `start-all.ps1`
+- Windows: `start-all.cmd`
+- macOS/Linux: `bash start-all.sh`
+- Node launcher: `npm run dev` from the repository root
 
 Terminal A (server):
 

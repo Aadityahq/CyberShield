@@ -6,6 +6,8 @@
 - MONGO_URI=your_mongodb_uri
 - JWT_SECRET=supersecretkey
 - AI_SERVICE_URL=http://localhost:8000
+- ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
+- DEBUG_REQUEST_LOGS=false
 - ENCRYPTION_KEY=your_64_char_hex_key
 - EMAIL_USER=your_gmail_address
 - EMAIL_PASS=your_gmail_app_password

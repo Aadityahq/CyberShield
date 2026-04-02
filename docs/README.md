@@ -6,6 +6,13 @@ Quick links:
 
 - [Onboarding Guide](onboarding.md)
 
+Startup shortcuts:
+
+- `start-all.ps1` on Windows PowerShell
+- `npm run dev` from the repository root
+- `start-all.cmd` on Windows
+- `bash start-all.sh` on macOS/Linux
+
 ## Current Build Status
 
 Implemented backend modules:

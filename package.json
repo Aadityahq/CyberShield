@@ -1,0 +1,10 @@
+{
+  "name": "cybershield-root",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/start-all.mjs",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev"
+  }
+}
