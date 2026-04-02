@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "make:super-admin": "node src/scripts/makeSuperAdmin.js"
+    "make:super-admin": "node src/scripts/makeSuperAdmin.js",
+    "reset:password": "node src/scripts/resetUserPassword.js"
   },
   "keywords": [],
   "author": "",

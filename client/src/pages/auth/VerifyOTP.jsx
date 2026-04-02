@@ -92,7 +92,7 @@ export default function VerifyOTP() {
         </button>
 
         <button
-          className="btn w-full mt-3"
+          className={`btn w-full mt-3 ${timer > 0 ? "btn-disabled opacity-60" : "btn-primary"}`}
           onClick={resend}
           disabled={resending || timer > 0}
           type="button"
