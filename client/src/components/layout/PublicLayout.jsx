@@ -14,9 +14,9 @@ export default function PublicLayout({ children }) {
             <p className="text-sm text-slate-600">Practical cyber defense for people, teams, and communities.</p>
           </div>
           <div className="flex items-center gap-5 text-sm text-slate-600">
-            <a href="#" className="hover:text-slate-900 transition-colors">Security Docs</a>
-            <a href="#" className="hover:text-slate-900 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-slate-900 transition-colors">Contact SOC</a>
+            <a href="/security-docs" className="hover:text-slate-900 transition-colors">Security Docs</a>
+            <a href="/privacy" className="hover:text-slate-900 transition-colors">Privacy</a>
+            <a href="/contact-soc" className="hover:text-slate-900 transition-colors">Contact SOC</a>
           </div>
         </div>
       </footer>
