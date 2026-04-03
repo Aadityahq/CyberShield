@@ -80,6 +80,12 @@ export default function Login() {
           {loading ? "Processing..." : "Login"}
         </button>
 
+        <p className="mt-3 text-sm text-right">
+          <Link to="/forgot-password" className="text-blue-500">
+            Forgot password?
+          </Link>
+        </p>
+
         <p className="mt-3 text-sm">
           Don't have an account?{" "}
           <Link to="/register" className="text-blue-500">

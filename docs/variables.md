@@ -5,7 +5,9 @@
 - PORT=5000
 - MONGO_URI=your_mongodb_uri
 - JWT_SECRET=supersecretkey
-- AI_SERVICE_URL=http://localhost:8000
+- AI_SERVICE_URL=`http://localhost:8000`
+- ALLOWED_ORIGINS=`http://localhost:3000,http://localhost:5173`
+- DEBUG_REQUEST_LOGS=false
 - ENCRYPTION_KEY=your_64_char_hex_key
 - EMAIL_USER=your_gmail_address
 - EMAIL_PASS=your_gmail_app_password
@@ -21,6 +23,8 @@
 - POST /api/auth/login
 - POST /api/auth/verify-otp
 - POST /api/auth/resend-otp
+- POST /api/auth/forgot-password
+- POST /api/auth/reset-password
 
 ### Users
 
@@ -104,6 +108,7 @@ Public:
 - /login
 - /register
 - /verify
+- /forgot-password
 - /reports
 - /ai
 - /articles
@@ -137,7 +142,7 @@ Admin Protected:
 Error pages:
 
 - /500
-- * (404)
+- \* (404)
 
 ---
 
@@ -172,6 +177,9 @@ Error pages:
 - Verify endpoint blocks after 5 failed attempts
 - Verify error payload includes attempts remaining
 - Resend OTP resets attempt counter and expiry
+- Forgot password sends reset token with 15-minute expiry
+- Reset password requires email + token + newPassword
+- Email validator lowercases but preserves dot characters in local-part
 
 ---
 
@@ -202,6 +210,8 @@ User:
 - verificationOTP
 - otpExpires (TTL index)
 - failedOtpAttempts
+- passwordResetToken
+- passwordResetExpires
 - alias (unique, sparse)
 - bio
 - xp
@@ -221,9 +231,9 @@ User:
 
 - DAILY_COIN_CAP = 100
 - Cooldowns:
-	- GAME_CORRECT: 10000ms
-	- VOTE: 2000ms
-	- MEME_UPLOAD: 30000ms
+  - GAME_CORRECT: 10000ms
+  - VOTE: 2000ms
+  - MEME_UPLOAD: 30000ms
 - Diminishing reward floor multiplier: 0.2
 
 ---
