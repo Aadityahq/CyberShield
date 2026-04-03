@@ -39,6 +39,14 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
+    passwordResetToken: {
+      type: String,
+      default: null
+    },
+    passwordResetExpires: {
+      type: Date,
+      default: null
+    },
     alias: {
       type: String,
       unique: true,
