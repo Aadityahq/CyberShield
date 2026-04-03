@@ -15,6 +15,12 @@ const articleSchema = new mongoose.Schema(
       enum: ["PHISHING", "SCAM", "PRIVACY", "GENERAL"],
       default: "GENERAL"
     },
+    tags: [
+      {
+        type: String,
+        trim: true
+      }
+    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
@@ -23,7 +29,19 @@ const articleSchema = new mongoose.Schema(
       type: String,
       enum: ["PENDING", "APPROVED", "REJECTED"],
       default: "PENDING"
-    }
+    },
+    upvotes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
+    downvotes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ]
   },
   { timestamps: true }
 );

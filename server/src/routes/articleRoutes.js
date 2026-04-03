@@ -5,7 +5,8 @@ import {
   getArticles,
   getArticleById,
   getPendingArticles,
-  updateArticleStatus
+  updateArticleStatus,
+  voteArticle
 } from "../controllers/articleController.js";
 
 import { protect } from "../middlewares/authMiddleware.js";
@@ -15,7 +16,7 @@ const router = express.Router();
 
 // Public routes
 router.get("/", getArticles);
-router.get("/:id", getArticleById);
+router.get("/admin/pending", protect, adminOnly, getPendingArticles);
 
 // User-submitted articles (any authenticated user)
 router.post(
@@ -24,13 +25,16 @@ router.post(
   [
     body("title").trim().escape().notEmpty().withMessage("Title required"),
     body("content").trim().escape().notEmpty().withMessage("Content required"),
-    body("category").isIn(["PHISHING", "SCAM", "PRIVACY", "GENERAL"]).withMessage("Invalid category")
+    body("category").isIn(["PHISHING", "SCAM", "PRIVACY", "GENERAL"]).withMessage("Invalid category"),
+    body("tags").optional()
   ],
   createArticle
 );
 
-// Admin only - pending articles and status updates
-router.get("/admin/pending", protect, adminOnly, getPendingArticles);
+router.post("/:id/vote", protect, voteArticle);
+router.get("/:id", getArticleById);
+
+// Admin only - status updates
 router.put("/:id/status", protect, adminOnly, updateArticleStatus);
 
 export default router;

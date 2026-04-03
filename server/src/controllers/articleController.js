@@ -12,12 +12,25 @@ export const createArticle = async (req, res) => {
       return sendError(res, 400, "Validation failed", errors.array());
     }
 
-    const { title, content, category } = req.body;
+    const { title, content, category, tags } = req.body;
+
+    const normalizedTags = Array.isArray(tags)
+      ? tags
+      : typeof tags === "string"
+        ? tags.split(",")
+        : [];
+
+    const cleanedTags = [...new Set(
+      normalizedTags
+        .map((tag) => tag.trim().toLowerCase())
+        .filter(Boolean)
+    )];
 
     const article = await Article.create({
       title,
       content,
       category,
+      tags: cleanedTags,
       createdBy: req.user._id,
       status: "PENDING"
     });
@@ -96,6 +109,58 @@ export const updateArticleStatus = async (req, res) => {
     await article.save();
 
     return sendSuccess(res, article);
+  } catch (error) {
+    return sendError(res, 500, error.message);
+  }
+};
+
+// Vote Article (Any authenticated user)
+export const voteArticle = async (req, res) => {
+  try {
+    const { type } = req.body;
+
+    if (!["up", "down"].includes(type)) {
+      return sendError(res, 400, "Vote type must be 'up' or 'down'");
+    }
+
+    const article = await Article.findById(req.params.id);
+
+    if (!article || article.status !== "APPROVED") {
+      return sendError(res, 404, "Article not found");
+    }
+
+    const userId = req.user._id.toString();
+    if (article.createdBy?.toString() === userId) {
+      return sendError(res, 403, "You cannot vote on your own article");
+    }
+
+    const hasUpvoted = article.upvotes.some((id) => id.toString() === userId);
+    const hasDownvoted = article.downvotes.some((id) => id.toString() === userId);
+
+    article.upvotes = article.upvotes.filter((id) => id.toString() !== userId);
+    article.downvotes = article.downvotes.filter((id) => id.toString() !== userId);
+
+    // Clicking the same vote again removes the vote, otherwise it switches vote.
+    if ((type === "up" && !hasUpvoted) || (type === "down" && !hasDownvoted)) {
+      if (type === "up") article.upvotes.push(req.user._id);
+      if (type === "down") article.downvotes.push(req.user._id);
+    }
+
+    await article.save();
+
+    const payload = {
+      _id: article._id,
+      upvoteCount: article.upvotes.length,
+      downvoteCount: article.downvotes.length,
+      userVote:
+        article.upvotes.some((id) => id.toString() === userId)
+          ? "up"
+          : article.downvotes.some((id) => id.toString() === userId)
+            ? "down"
+            : null
+    };
+
+    return sendSuccess(res, payload, 200, "Vote updated");
   } catch (error) {
     return sendError(res, 500, error.message);
   }
