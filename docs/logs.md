@@ -341,6 +341,45 @@
 - Removed legacy duplicate frontend pages no longer used by route map
 - Ran final diagnostics pass and synchronized docs (`context.md`, `todo.md`, `bugs.md`, `README.md`, `variables.md`, `onboarding.md`)
 
+## Day 37
+
+- Redesigned Knowledge Hub UI (`/articles`) to a modern two-column layout matching the requested reference format
+- Added left sidebar topics (category filters with icons and counts)
+- Added upgraded search bar and animated list skeleton states
+- Added card-based article feed with richer metadata presentation (author, relative time, category, read-time indicator)
+- Preserved existing backend/API integration and article submission workflow
+- Kept mobile responsiveness and existing route behavior intact
+
+## Day 38
+
+- Applied final Knowledge Hub UI alignment to match requested reference look more closely (left sidebar + glass cards)
+- Updated article cards, loading state cards, empty state card, and submit form wrapper to use unified glass styling
+- Added reusable `.glass` utility in frontend global stylesheet for consistent frosted panel appearance
+- Mapped legacy page module (`pages/KnowledgeHub.jsx`) to the redesigned hub page to prevent outdated UI usage
+
+## Day 39
+
+- Redesigned Knowledge Hub article detail page to match new hub format and visual language
+- Added left sidebar panel (back action + category/date/author metadata)
+- Upgraded article detail content container to glass card style with responsive spacing
+- Added improved loading skeleton state and user-friendly not-found state for article detail view
+
+## Day 40
+
+- Added article upvote/downvote backend support (`upvotes`, `downvotes`) in Article schema
+- Added authenticated article voting endpoint: `POST /api/articles/:id/vote` with toggle/switch behavior
+- Updated article routes ordering to avoid dynamic `/:id` collisions with admin static paths
+- Integrated upvote/downvote controls into Knowledge Hub cards while keeping left topics sidebar flow
+- Added frontend vote state handling (active vote highlight + live vote count updates)
+
+## Day 41
+
+- Added multi-tag support to articles with `tags` stored on the Article schema
+- Updated article creation to accept comma-separated tags from the submit form
+- Replaced Knowledge Hub sidebar category filter with tag-based topic filtering
+- Added visible tag chips on article cards and article detail pages
+- Kept category as a separate article field while using tags for sidebar discovery
+
 ---
 
 ## Notes

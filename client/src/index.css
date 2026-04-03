@@ -20,6 +20,13 @@ body {
   @apply bg-white p-5 rounded-xl shadow-sm border hover:shadow-md transition;
 }
 
+.glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.86));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
 .btn {
   @apply px-4 py-2 rounded-lg text-white font-medium transition;
 }
