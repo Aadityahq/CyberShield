@@ -22,9 +22,15 @@ export default function ViewReports() {
     try {
       setLoading(true);
       const endpoint = user ? "/reports/me" : "/reports";
-      const { data } = await API.get(`${endpoint}?page=${page}&limit=${limit}`);
-      setReports(data);
-      setHasNextPage(data.length === limit);
+      const response = await API.get(`${endpoint}?page=${page}&limit=${limit}`);
+      const payload = response.data;
+      const items = Array.isArray(payload) ? payload : (payload?.items || []);
+      const hasNext = Array.isArray(payload)
+        ? items.length === limit
+        : Boolean(payload?.pagination?.hasNextPage);
+
+      setReports(items);
+      setHasNextPage(hasNext);
     } catch (error) {
       console.error(error);
     } finally {

@@ -97,6 +97,7 @@ export const createReport = async (req, res) => {
 export const getReports = async (req, res) => {
   try {
     const { page, limit } = getPagination(req.query, PUBLIC_PAGE_LIMIT_MAX);
+    const total = await Report.countDocuments();
 
     const reports = await Report.find()
       .select("title description category severity status isAnonymous isSensitive createdAt updatedAt")
@@ -106,7 +107,19 @@ export const getReports = async (req, res) => {
 
     const safeReports = reports.map((report) => serializePublicReport(report));
 
-    return sendSuccess(res, safeReports);
+    const totalPages = total > 0 ? Math.ceil(total / limit) : 0;
+    const hasNextPage = page * limit < total;
+
+    return sendSuccess(res, {
+      items: safeReports,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage
+      }
+    });
   } catch (error) {
     return sendError(res, 500, error.message);
   }
@@ -116,8 +129,10 @@ export const getReports = async (req, res) => {
 export const getMyReports = async (req, res) => {
   try {
     const { page, limit } = getPagination(req.query, PRIVATE_PAGE_LIMIT_MAX);
+    const match = { user: req.user._id };
+    const total = await Report.countDocuments(match);
 
-    const reports = await Report.find({ user: req.user._id })
+    const reports = await Report.find(match)
       .select("title description category severity status contactEmail evidence isAnonymous isSensitive history createdAt updatedAt")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
@@ -147,7 +162,19 @@ export const getMyReports = async (req, res) => {
       return item;
     });
 
-    return sendSuccess(res, safeReports);
+    const totalPages = total > 0 ? Math.ceil(total / limit) : 0;
+    const hasNextPage = page * limit < total;
+
+    return sendSuccess(res, {
+      items: safeReports,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage
+      }
+    });
   } catch (error) {
     return sendError(res, 500, error.message);
   }

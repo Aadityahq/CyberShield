@@ -45,6 +45,11 @@ Encryption migration helper:
 - GET /api/reports/me (protected, own detailed reports)
 - PUT /api/reports/:id (admin)
 
+Report listing response shape (`GET /api/reports`, `GET /api/reports/me`):
+
+- `items`: report array
+- `pagination`: `{ page, limit, total, totalPages, hasNextPage }`
+
 ### AI
 
 - POST /api/ai/predict (public, optional auth for XP rewards)

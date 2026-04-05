@@ -106,9 +106,12 @@ export const getUserDashboardData = async (currentUserId) => {
     API.get("/memes")
   ]);
 
+  const reportsPayload = reportsRes.data;
+  const reports = Array.isArray(reportsPayload) ? reportsPayload : (reportsPayload?.items || []);
+
   return transformUserDashboard({
     profile: profileRes.data,
-    reports: reportsRes.data || [],
+    reports,
     articles: articlesRes.data || [],
     forumPosts: forumRes.data || [],
     memes: memesRes.data || [],

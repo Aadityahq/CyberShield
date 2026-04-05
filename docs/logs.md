@@ -404,6 +404,7 @@
 - Added protected own-reports endpoint (`GET /api/reports/me`) with detailed fields and conditional sensitive decrypt
 - Added route-level rate limit guard to public report listing to reduce scraping/abuse risk
 - Added bounded pagination server-side for both public and protected report list endpoints
+- Added explicit report pagination metadata (`items`, `pagination`) to improve client paging accuracy
 - Updated frontend report and dashboard data calls to use `GET /api/reports/me` for authenticated user flows
 
 ---
